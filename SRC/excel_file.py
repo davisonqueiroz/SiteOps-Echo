@@ -84,3 +84,28 @@ class excel_file:
 
     def delete_column(self,sheet,column_position,row_position = 1):
         sheet.cells(row_position,column_position).api.EntireColumn.Delete()
+
+        #use of formulas
+
+    def apply_formula(self,sheet,apply_range,formula_apply):
+        sheet.range(apply_range).formula = formula_apply
+
+    def apply_text_join(self,sheet,range_formula,apply_cell,delimiter = ","):
+        formula_textjoin = f'=TEXTJOIN({delimiter},,{range_formula})'
+        self.apply_formula(sheet,apply_cell,formula_textjoin)
+
+
+    def apply_concat(self,sheet,first_cell,second_cell,apply_range):
+        formula_concat = f'=CONCAT({first_cell},"-",{second_cell})'
+        self.apply_formula(sheet,apply_range,formula_concat)
+        self.transform_to_value(apply_range,sheet)
+
+    def transform_to_value(self,apply_range,sheet):
+        range_transform = sheet.range(apply_range)
+        values = range_transform.value
+        range_transform.value = [[val] for val in values]
+
+    def apply_xlookup(self,sheet,search_value,search_array,return_array,apply_range):
+        formula_xlookup = f'=XLOOKUP({search_value},{search_array},{return_array})'
+        self.apply_formula(sheet,apply_range,formula_xlookup)
+        self.transform_to_value(apply_range,sheet)
