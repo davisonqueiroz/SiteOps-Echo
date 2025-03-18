@@ -109,3 +109,19 @@ class excel_file:
         formula_xlookup = f'=XLOOKUP({search_value},{search_array},{return_array})'
         self.apply_formula(sheet,apply_range,formula_xlookup)
         self.transform_to_value(apply_range,sheet)
+
+        #other methods
+
+    def replace(self,sheet,replace_range,original_value,new_value):
+        to_replace= sheet.range(replace_range)
+        to_replace.api.Replace(original_value,new_value)
+
+    def turn_in_text(self,sheet,column_range,column_cell):
+        conversion = sheet.range(f'{column_range}2:{column_range}{self.get_last_row(sheet,column_cell)}')
+        conversion.api.TextToColumns(Destination= conversion.api,
+                                     DataType= 1,
+                                     Semicolon = False)
+    
+    def fill_with_value(self,sheet,cell_to_fill,value):
+        sheet.range(cell_to_fill).value = value
+    
