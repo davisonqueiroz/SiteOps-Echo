@@ -73,3 +73,14 @@ class excel_file:
     def delete_rows_in_range(self,sheet,delete_range):
         delete_cells = sheet.range(delete_range)
         delete_cells.api.EntireRow.Delete()
+
+        #columns manipulation
+    
+    def new_column(self,sheet,column_position,row_position = 1):
+        sheet.cells(row_position,column_position).api.EntireColumn.Insert()
+
+    def name_header(self,sheet,name,column_position,row_position = 1):
+        sheet.cells(row_position,column_position).value = name
+
+    def delete_column(self,sheet,column_position,row_position = 1):
+        sheet.cells(row_position,column_position).api.EntireColumn.Delete()
