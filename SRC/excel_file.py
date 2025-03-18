@@ -51,3 +51,25 @@ class excel_file:
     def rename_sheet(self,current_name,new_name):
         sheet = self.get_sheet(current_name)
         sheet.name = new_name
+
+        #rows manipulation
+
+    def get_last_row(self,sheet,column_position,row_position = 1):
+        return sheet.cells(row_position,column_position).end('down').row
+    
+    def get_end_row_up(self,sheet,row_position,column_position = 2):
+        return sheet.cells(row_position,column_position).end('up').row
+    
+    def new_row(self,sheet,row_position,column_position = 1):
+        sheet.cells(row_position,column_position).api.EntireRow.Insert()
+
+    def clear_contents_rows(self,sheet,clear_range):
+        clear_cells = sheet.range(clear_range)
+        clear_cells.clear_contents()
+    
+    def delete_row(self,sheet,row_position,column_position):
+        sheet.cells(row_position,column_position).api.EntireRow.Delete()
+
+    def delete_rows_in_range(self,sheet,delete_range):
+        delete_cells = sheet.range(delete_range)
+        delete_cells.api.EntireRow.Delete()
