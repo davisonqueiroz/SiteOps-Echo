@@ -125,3 +125,26 @@ class excel_file:
     def fill_with_value(self,sheet,cell_to_fill,value):
         sheet.range(cell_to_fill).value = value
     
+    #creating and manipulation dataframes
+
+    def new_dataframe(self,path):
+        df = pd.read_excel(path)
+
+    def new_dataframe_from_variable(self,path,sheet_variable_wkbook):
+        sheet = sheet_variable_wkbook.name
+        df = pd.read_excel(path,sheet_name = sheet)
+
+    def remove_nas_dataframe(self,data_frame,header_column):
+        data_frame[data_frame[header_column].notna()]
+        
+    def get_nulls_in_dataframe(self,data_frame,header_column):
+        data_frame[data_frame[header_column].isnull()]
+    
+    def create_column_dataframe(self,dataframe,new_column,content):
+        dataframe[new_column] = content
+    
+    def new_filtered_dataframe(self,dataframe,filter,column_filter):
+        dataframe.loc[dataframe[column_filter] == filter]
+
+    def concat_dataframes(self,dataframe_top,dataframe_down):
+        pd.concat([dataframe_top,dataframe_down],ignore_index=True)
