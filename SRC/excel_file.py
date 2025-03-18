@@ -29,3 +29,25 @@ class excel_file:
 
     def quit_whitout_saving(self):
         self.book.app.quit()
+
+     #sheets manipulation
+
+    def new_sheet(self,sheet_name):
+        self.book.sheets.add(sheet_name)
+
+    def get_sheet(self,sheet_name):
+        return self.book.sheets[f'{sheet_name}']
+    
+    def get_first_sheet(self):
+        return self.book.sheets[0]
+    
+    def delete_sheet(self,sheet_name):
+        sheet_delete = self.get_sheet(sheet_name)
+        sheet_delete.delete()
+
+    def move_sheet_to_beginning(self,sheet_name):
+        sheet_name.api.Move(Before = self.book.sheets[0].api)
+
+    def rename_sheet(self,current_name,new_name):
+        sheet = self.get_sheet(current_name)
+        sheet.name = new_name
