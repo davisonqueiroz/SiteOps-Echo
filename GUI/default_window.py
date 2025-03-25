@@ -8,15 +8,17 @@ class window:
         self.window.resizable(resizable,resizable)
         self.components = {}       
     
-    def create_button(self,name_btn,text,height,width,pos_horz,pos_vert,font =("Arial",16),command = None,fg_color = "gray",position_type = "place"):
+    def create_button(self,name_btn,text,height,width,pos_horz,pos_vert,font =("Arial",16),command = None,fg_color = None,position_type = "place"):
         button = ctk.CTkButton(self.window,text=text,height=height,width=width,font=font,fg_color=fg_color,command=command)
         self.position_component(name_btn,button,pos_horz,pos_vert,position_type)
-        self.components[name_btn] = button    
+        self.components[name_btn] = button   
+        return button 
 
     def create_label(self,name_label,text,pos_horz,pos_vert,text_color = "white",font =("Arial",16),bg_color = None,position_type = "place"):
         label = ctk.CTkLabel(self.window,text=text,font=font,text_color=text_color,bg_color=bg_color)
         self.position_component(name_label,label,pos_horz,pos_vert,position_type)
         self.components[name_label] = label
+        return label
 
     def position_component(self,comp_name,component,pos_horz,pos_vert,position_type = "place"):
         if comp_name in self.components:
