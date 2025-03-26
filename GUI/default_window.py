@@ -8,8 +8,8 @@ class window:
         self.window.resizable(resizable,resizable)
         self.components = {}       
     
-    def create_button(self,name_btn,text,height,width,pos_horz,pos_vert,font =("Arial",16),command = None,fg_color = None,position_type = "place"):
-        button = ctk.CTkButton(self.window,text=text,height=height,width=width,font=font,fg_color=fg_color,command=command)
+    def create_button(self,name_btn,text,height,width,pos_horz,pos_vert,font =("Arial",16),command = None,fg_color = None,position_type = "place",master = None):
+        button = ctk.CTkButton(master = master,text=text,height=height,width=width,font=font,fg_color=fg_color,command=command)
         self.position_component(name_btn,button,pos_horz,pos_vert,position_type)
         self.components[name_btn] = button   
         return button 
