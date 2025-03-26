@@ -6,16 +6,20 @@ class menu_window(window):
 
     
 
-    def __init__(self,window_title,width,height,posx,posy):
+    def __init__(self,window_title,width,height):
         super().__init__(window_title,width,height)
-        self.window.geometry(f'{width}x{height}+{posx}+{posy}')
+        pos_x = self.window.winfo_screenwidth()
+        pos_y = self.window.winfo_screenheight()
+        pos_x = (pos_x // 2) - (width // 2)
+        pos_y = (pos_y // 2) - (height // 2)
+        self.window.geometry(f'{width}x{height}+{pos_x}+{pos_y}')
         self.base_colour = "#EEEEEE"
         self.secondary_colour = "#304FFE"
         self.menu_icon = ctk.CTkImage(Image.open("ICONS/menu_icon.png"),size=(30,30))
         self.labels_dict = {}
-        self.frame_width = 45
+        self.frame_width = 60
 
-    def create_button(self, name_btn, text, height, width, pos_horz, pos_vert, font =("Arial",16), command=None, fg_color=None,text_color = "white",bg_color =None, position_type="place",corner_radius = 0,image = None,border_width= 0,hover_color = None):
+    def create_button(self, name_btn, text, height, width, pos_horz, pos_vert, font =("Arial",16), command=None, fg_color='transparent',text_color = "white",bg_color ='transparent', position_type="place",corner_radius = 0,image = None,border_width= 0,hover_color = None):
         button = super().create_button(name_btn, text, height, width, pos_horz, pos_vert, font, command, fg_color,position_type)
         button.configure(bg_color = bg_color,corner_radius = corner_radius,image = image,border_width= border_width,hover_color = hover_color,text_color= text_color)
         
@@ -24,9 +28,9 @@ class menu_window(window):
         self.menu_bar_frame = ctk.CTkFrame(self.window,border_color=self.secondary_colour,fg_color=self.secondary_colour)
         self.menu_bar_frame.pack(side=ctk.LEFT,fill=ctk.Y,padx=2,pady=3)
         self.menu_bar_frame.pack_propagate(False)
-        self.menu_bar_frame.configure(width=45)
+        self.menu_bar_frame.configure(width=self.frame_width)
 
-        self.create_button("menu_btn","",30,30,4,10,bg_color=self.secondary_colour,hover_color=self.base_colour,image=self.menu_icon,fg_color=self.secondary_colour,command=self.alterate_menu_command)
+        self.create_button("menu_btn","",30,30,12,10,hover_color=self.secondary_colour,image=self.menu_icon,fg_color=self.secondary_colour,command=self.alterate_menu_command,corner_radius= 3,bg_color= self.secondary_colour)
         
         
     def create_sub_menu_button(self,name_btn,pos_hor,pos_vert,height_btn,width_btn,height,width,fg_color = "white",text = ""):
@@ -51,7 +55,7 @@ class menu_window(window):
             self.window.after(2,self.extending_animation)
 
     def folding_animation(self):
-        if self.frame_width > 45:
+        if self.frame_width > 60:
             self.frame_width -=5
             self.menu_bar_frame.configure(width= self.frame_width)
             self.window.after(2,self.folding_animation)
