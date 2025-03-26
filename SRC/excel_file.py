@@ -127,8 +127,11 @@ class excel_file:
     
     #creating and manipulation dataframes
 
-    def new_dataframe(self,path):
-        df = pd.read_excel(path)
+    def new_dataframe(self,path,type = True ): #se True sera arquivo xlsx, false para arquivo csv
+        if type == True:
+            df = pd.read_excel(path)
+        else:
+            df = pd.read_csv(path)
 
     def new_dataframe_from_variable(self,path,sheet_variable_wkbook):
         sheet = sheet_variable_wkbook.name
