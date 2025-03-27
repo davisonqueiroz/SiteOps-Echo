@@ -15,7 +15,7 @@ class menu_window(window):
         self.window.geometry(f'{width}x{height}+{pos_x}+{pos_y}')
         self.base_colour = "#EEEEEE"
         self.secondary_colour = "#304FFE"
-        self.menu_icon = ctk.CTkImage(Image.open("ICONS/menu_icon.png"),size=(30,30))
+        self.menu_icon = ctk.CTkImage(Image.open("ASSETS/ICONS/menu_icon.png"),size=(30,30))
         self.labels_dict = {}
         self.frame_width = 60
 
