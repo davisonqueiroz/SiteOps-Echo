@@ -23,12 +23,11 @@ class menu_window(window):
         self.labels_dict = {}
         self.frame_width = 60
 
-        self.menu_bar_frame = super().create_frame(self.window,self.secondary_colour,self.secondary_colour,ctk.LEFT,ctk.Y,5,8,self.frame_width)
+        self.menu_bar_frame = super().create_frame(self.window,self.secondary_color,self.secondary_color,ctk.LEFT,ctk.Y,5,8,self.frame_width)
 
-        self.create_button("menu_btn","",30,30,12,10,hover_color=self.secondary_colour,image=self.menu_icon,fg_color=self.secondary_colour,command=self.alterate_menu_command,corner_radius= 3,bg_color= self.secondary_colour,master= self.menu_bar_frame)
+        self.create_button("menu_btn","",30,30,12,10,hover_color=self.secondary_color,image=self.menu_icon,fg_color=self.secondary_color,command=self.alterate_menu_command,corner_radius= 3,bg_color= self.secondary_color,master= self.menu_bar_frame)
 
-        self.central_frame = super().create_frame(self.window,"#DDDDDD","#DDDDDD",ctk.RIGHT,ctk.BOTH,8,8,870)
-        self.create_label(self.central_frame,"test_lbl","apenas um teste",700,200,bg_color="#DDDDDD")
+        self.central_frame = super().create_frame(self.window,self.tertiary_color,self.tertiary_color,ctk.RIGHT,ctk.BOTH,8,8,870)
 
 
     def create_button(self, name_btn, text, height, width, pos_horz, pos_vert, font =("Arial",16), command=None, fg_color="#304FFE",text_color = "white",bg_color ='white', position_type="place",corner_radius = 0,image = None,border_width= 0,hover_color = 'white',master = None):
@@ -38,7 +37,7 @@ class menu_window(window):
     def create_sub_menu_button(self,name_btn,pos_ver,image,height = 30,width = 2,bg_color = "#304FFE"):
         image_path = image
         icon = ctk.CTkImage(Image.open(image_path),size=(30,30))
-        self.create_button(master = self.menu_bar_frame,name_btn=name_btn,pos_horz=12,pos_vert=pos_ver,height=30,width=30,fg_color=self.secondary_colour,hover_color=self.secondary_colour,bg_color=self.secondary_colour,text="",image=icon,command= lambda : self.switch_indication(name_btn))
+        self.create_button(master = self.menu_bar_frame,name_btn=name_btn,pos_horz=12,pos_vert=pos_ver,height=30,width=30,fg_color=self.secondary_color,hover_color=self.secondary_color,bg_color=self.secondary_color,text="",image=icon,command= lambda : self.switch_indication(name_btn))
         self.create_indicator(master = self.menu_bar_frame,name=name_btn,pos_hor=6
                               ,pos_ver=pos_ver + 2,height=height,width=width,bg_color=bg_color)
 
@@ -48,9 +47,9 @@ class menu_window(window):
 
     def switch_indication(self,lb_selected):
         for label in self.labels_dict.values():
-            label.configure(bg_color=self.secondary_colour)
+            label.configure(bg_color=self.secondary_color)
         lb_selected = self.labels_dict[lb_selected]
-        lb_selected.configure(bg_color= self.base_colour)
+        lb_selected.configure(bg_color= self.base_color)
 
     def extending_animation(self):
         if self.frame_width < 200:
@@ -59,7 +58,7 @@ class menu_window(window):
             self.window.after(2,self.extending_animation)
         if self.frame_width == 200:
             self.components["menu_btn"].configure(state="normal")
-            print(self.central_frame.winfo_screenmmwidth)
+
 
     def folding_animation(self):
         if self.frame_width > 60:
