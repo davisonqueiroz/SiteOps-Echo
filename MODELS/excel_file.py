@@ -54,6 +54,22 @@ class excel_file:
 
         #rows manipulation
 
+    def get_header_position(self,sheet,value_search):
+        header = sheet.range("A1").expand("right").value
+        position, message=[], []
+        for value in value_search:
+            if value in header:
+                position_header = header.index(value) + 1
+                position.append(xw.utils.col_name(position_header))
+            else:
+                message.append(value)
+
+            if not message:
+                pass
+                #message box => value não encontrado
+
+        return position_header
+
     def get_last_row(self,sheet,column_position,row_position = 1):
         return sheet.cells(row_position,column_position).end('down').row
     
@@ -127,27 +143,29 @@ class excel_file:
     
     #creating and manipulation dataframes
 
-    def new_dataframe(self,path,type = True ): #se True sera arquivo xlsx, false para arquivo csv
-        if type == True:
-            df = pd.read_excel(path)
-        else:
-            df = pd.read_csv(path)
+def new_dataframe(path,type = True,delimiter=None,encoding=None): #se True sera arquivo xlsx, false para arquivo csv
+    if type == True:
+        df = pd.read_excel(path)
+        return df
+    else:
+        df = pd.read_csv(path,delimiter,encoding)
+        return df
 
-    def new_dataframe_from_variable(self,path,sheet_variable_wkbook):
-        sheet = sheet_variable_wkbook.name
-        df = pd.read_excel(path,sheet_name = sheet)
+def new_dataframe_from_variable(path,sheet_variable_wkbook):
+    sheet = sheet_variable_wkbook.name
+    df = pd.read_excel(path,sheet_name = sheet)
 
-    def remove_nas_dataframe(self,data_frame,header_column):
-        data_frame[data_frame[header_column].notna()]
-        
-    def get_nulls_in_dataframe(self,data_frame,header_column):
-        data_frame[data_frame[header_column].isnull()]
+def remove_nas_dataframe(data_frame,header_column):
+    data_frame[data_frame[header_column].notna()]
     
-    def create_column_dataframe(self,dataframe,new_column,content):
-        dataframe[new_column] = content
-    
-    def new_filtered_dataframe(self,dataframe,filter,column_filter):
-        dataframe.loc[dataframe[column_filter] == filter]
+def get_nulls_in_dataframe(data_frame,header_column):
+    data_frame[data_frame[header_column].isnull()]
 
-    def concat_dataframes(self,dataframe_top,dataframe_down):
-        pd.concat([dataframe_top,dataframe_down],ignore_index=True)
+def create_column_dataframe(dataframe,new_column,content):
+    dataframe[new_column] = content
+
+def new_filtered_dataframe(dataframe,filter,column_filter):
+    dataframe.loc[dataframe[column_filter] == filter]
+
+def concat_dataframes(dataframe_top,dataframe_down):
+    pd.concat([dataframe_top,dataframe_down],ignore_index=True)
