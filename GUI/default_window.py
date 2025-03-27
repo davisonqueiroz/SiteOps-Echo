@@ -1,5 +1,4 @@
 import customtkinter as ctk
-
 class window:
     def __init__(self,window_title,width,height,resizable = False):
         self.window = ctk.CTk()
@@ -14,14 +13,21 @@ class window:
         self.components[name_btn] = button   
         return button 
 
-    def create_label(self,name_label,text,pos_horz,pos_vert,text_color = "white",font =("Arial",16),bg_color = None,position_type = "place"):
-        label = ctk.CTkLabel(self.window,text=text,font=font,text_color=text_color,bg_color=bg_color)
+    def create_label(self,master,name_label,text,pos_horz,pos_vert,text_color = "white",font =("Arial",16),bg_color = None,position_type = "place",width = 0, height = 20):
+        label = ctk.CTkLabel(master,text=text,font=font,text_color=text_color,bg_color=bg_color,width=width,height=height)
         self.position_component(name_label,label,pos_horz,pos_vert,position_type)
         self.components[name_label] = label
         return label
+    
+    def create_frame(self,master,border_color,fg_color,side,fill,padx,pady,width = 200,pack_propagate = False,corner_radius = 0):
+        frame = ctk.CTkFrame(master=master,border_color=border_color,fg_color=fg_color,corner_radius=corner_radius)
+        frame.pack(side=side,fill=fill,padx=padx,pady=pady)
+        frame.pack_propagate(pack_propagate)
+        frame.configure(width=width)
+        return frame
 
-    def position_component(self,comp_name,component,pos_horz,pos_vert,position_type = "place"):
-        if comp_name in self.components:
+    def position_component(self,comp_name,component,pos_horz,pos_vert,position_type = "place",reposition = False):
+        if reposition == True:
             if position_type =="place":    
                 self.components[comp_name].place_forget()
             elif position_type == "grid":
