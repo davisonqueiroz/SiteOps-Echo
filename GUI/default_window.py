@@ -19,14 +19,17 @@ class window:
         self.components[name_label] = label
         return label
     
-    def create_frame(self,master,border_color,fg_color,side,fill,padx,pady,width = 200,height = None,pack_propagate = False,corner_radius = 0,position_type = "pack",row = None,column = None):
+    def create_frame(self,master,border_color,fg_color,side = None,fill = None,padx = None,pady = None,width = 200,height = None,pack_propagate = False,grid_propagate = None,corner_radius = 0,position_type = "pack",row = None,column = None):
         frame = ctk.CTkFrame(master=master,border_color=border_color,fg_color=fg_color,corner_radius=corner_radius)
+        if grid_propagate != None:
+            frame.grid_propagate(grid_propagate)
         if position_type == "pack":
             frame.pack(side=side,fill=fill,padx=padx,pady=pady)
             frame.pack_propagate(pack_propagate)
             frame.configure(width=width,height= height)
         elif position_type == "grid":
-            frame.grid(row= row,column= column)
+            frame.grid(row= row,column= column,padx = padx,pady = pady)
+            frame.configure(width=width,height= height)
 
         return frame
 
