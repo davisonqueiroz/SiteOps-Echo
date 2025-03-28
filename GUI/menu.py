@@ -23,11 +23,11 @@ class menu_window(window):
         self.labels_dict = {}
         self.frame_width = 60
 
-        self.menu_bar_frame = super().create_frame(self.window,self.secondary_color,self.secondary_color,ctk.LEFT,ctk.Y,5,8,self.frame_width)
+        self.menu_bar_frame = super().create_frame(self.window,self.secondary_color,self.secondary_color,ctk.LEFT,ctk.Y,5,8,self.frame_width,corner_radius= 20)
 
-        self.create_button("menu_btn","",30,30,12,10,hover_color=self.secondary_color,image=self.menu_icon,fg_color=self.secondary_color,command=self.alterate_menu_command,corner_radius= 3,bg_color= self.secondary_color,master= self.menu_bar_frame)
+        self.create_button("menu_btn","",30,30,8,10,hover_color=self.secondary_color,image=self.menu_icon,fg_color=self.secondary_color,command=self.alterate_menu_command,corner_radius= 3,bg_color= self.secondary_color,master= self.menu_bar_frame)
 
-        self.central_frame = super().create_frame(self.window,self.tertiary_color,self.tertiary_color,ctk.RIGHT,ctk.BOTH,8,8,870)
+        self.central_frame = super().create_frame(self.window,self.tertiary_color,self.tertiary_color,ctk.RIGHT,ctk.BOTH,8,8,width=870,grid_propagate= False,corner_radius= 20)
 
 
     def create_button(self, name_btn, text, height, width, pos_horz, pos_vert, font =("Arial",16), command=None, fg_color="#304FFE",text_color = "white",bg_color ='white', position_type="place",corner_radius = 0,image = None,border_width= 0,hover_color = 'white',master = None):
