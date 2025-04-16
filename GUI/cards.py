@@ -1,20 +1,63 @@
-from GUI.default_window import *
-from GUI.menu import *
+from PySide6.QtWidgets import QFrame, QVBoxLayout, QLabel, QHBoxLayout, QPushButton, QSizePolicy
+from PySide6.QtCore import Qt
 
-class card_frame(menu_window):
-    def __init__(self,menu_instance):
-        self.menu_instance = menu_instance
-        self.components = {}
+class Card(QFrame):
+    def __init__(self, title, button1_text, button2_text, card_id):
+        super().__init__()
+        self.card_id = card_id
+        self.setStyleSheet("""
+            QFrame {
+                color: #F5F5F5;
+                background-color: #304FFE;
+                border-radius: 10px;
+                padding: 10px;
+            }
+            QPushButton {
+                border-radius: 5px;
+                padding: 8px;
+            }
+        """)
+        self.card_id = card_id
+        
+        # Layout principal do card (QVBoxLayout)
+        layout = QVBoxLayout(self)
+        
+        # Título do card
+        self.title_label = QLabel(title)
+        self.title_label.setAlignment(Qt.AlignCenter)
+        self.title_label.setStyleSheet("font-size: 18px; font-weight: bold; color: #F5F5F5;")
+        
+        # Botão 1
+        self.btn1 = QPushButton(button1_text)
+        self.btn1.setStyleSheet("""
+            QPushButton {
+                background-color: #F5F5F5;
+                color: #0C0C0D;
+                border: none;
+            }
+            QPushButton:hover {
+                background-color: #CCCCCC;
+            }
+        """)
+        
+        # Botão 2
+        self.btn2 = QPushButton(button2_text)
+        self.btn2.setStyleSheet("""
+            QPushButton {
+                background-color: #333333;
+                color: #F5F5F5;
+                border: none;
+            }
+            QPushButton:hover {
+                background-color: #27ae60;
+            }
+        """)
+        
+        # Adicionando widgets no layout
+        layout.addWidget(self.title_label)
+        layout.addWidget(self.btn1)
+        layout.addWidget(self.btn2)
+        
+        # Definindo o layout no QFrame
+        self.setLayout(layout)
 
-    def create_card(self,title,select_text,row,column,padx,pady):
-        #,description,selec_title
-        self.card = super().create_frame(self.menu_instance.central_frame,self.menu_instance.tertiary_color,self.menu_instance.secondary_color,corner_radius= 30,width= 210, height= 280,position_type= "grid",row=row,column= column,padx=padx,pady=pady)
-        title_lbl = super().create_label(self.card,"title",title,60,16,self.menu_instance.base_color,bg_color= self.menu_instance.secondary_color,font=("Arial Black",20))
-        select_lbl = super().create_label(self.card,"select_lbl",select_text,15,130,self.menu_instance.base_color,bg_color= self.menu_instance.secondary_color)
-        select_btn = super().create_button("select_btn","Select archive",25,90,60
-        ,128,master= self.card,bg_color= "transparent",fg_color= self.menu_instance.base_color,corner_radius=20,hover_color=self.menu_instance.base_color,text_color=self.menu_instance.secondary_color)
-        select_lbl = super().create_label(self.card,"select_lbl","ADD",15,165,self.menu_instance.base_color,bg_color= self.menu_instance.secondary_color)
-        select_btn = super().create_button("select_btn","Select archive",25,90,60
-        ,163,master= self.card,bg_color= "transparent",fg_color= self.menu_instance.base_color,corner_radius=20,hover_color=self.menu_instance.base_color,text_color=self.menu_instance.secondary_color)
-        generate_btn = super().create_button("generate_btn","Gerar",40,120,45
-        ,210,master= self.card,bg_color= "transparent",fg_color= self.menu_instance.base_color,corner_radius=20,hover_color=self.menu_instance.base_color,text_color=self.menu_instance.secondary_color)
