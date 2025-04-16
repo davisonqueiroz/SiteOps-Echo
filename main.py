@@ -1,7 +1,9 @@
-from GUI.menu import menu_window
+import sys
+from PySide6.QtWidgets import QApplication
+from GUI.menu import MainWindow
 
-window = menu_window("teste",930,700,"#EEEEEE","#304FFE","#DDDDDD")
-# window.create_menu_bar()
-window.create_sub_menu_button("btn_home",180,"ASSETS/ICONS/home_icon.png",bg_color="#EEEEEE")
-window.create_sub_menu_button("btn_cruzeiro",235,"ASSETS/ICONS/cruzeiro_icon.png")
-window.display()
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec())
