@@ -167,5 +167,27 @@ def create_column_dataframe(dataframe,new_column,content):
 def new_filtered_dataframe(dataframe,filter,column_filter):
     dataframe.loc[dataframe[column_filter] == filter]
 
+        #replicate formulas behavior
+        
 def concat_dataframes(dataframe_top,dataframe_down):
     pd.concat([dataframe_top,dataframe_down],ignore_index=True)
+
+def xlookup_pd(df_base,df_search,lookup_value,lookup_array,return_array,name_column):
+    df_base[name_column] = df_base[lookup_value].map(df_search.set_index(lookup_array)[return_array])
+    return df_base[name_column]
+
+def concat_pd(list_of_columns):
+    quantity = len(list_of_columns)
+    concat = list_of_columns[0].astype(str) + list_of_columns[1].astype(str)
+    if quantity > 2:
+        for column in range(2, quantity):
+            concat = concat + list_of_columns[column].astype(str)
+    return concat
+
+def remove_duplicates_pd(dataframe,column_look):
+    return dataframe.drop_duplicates(subset= column_look)
+
+def textjoin_pd(serie, separator = ","):
+    return separator.join(serie.dropna().astype(str).unique())
+
+
