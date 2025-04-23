@@ -143,9 +143,9 @@ class excel_file:
     
     #creating and manipulation dataframes
 
-def new_dataframe(path,type = True,delimiter=None,encoding=None): #se True sera arquivo xlsx, false para arquivo csv
+def new_dataframe(path,sheet_name,type = True,delimiter=None,encoding=None): #se True sera arquivo xlsx, false para arquivo csv
     if type == True:
-        df = pd.read_excel(path)
+        df = pd.read_excel(path,sheet_name=sheet_name)
         return df
     else:
         df = pd.read_csv(path,delimiter,encoding)
@@ -154,18 +154,56 @@ def new_dataframe(path,type = True,delimiter=None,encoding=None): #se True sera 
 def new_dataframe_from_variable(path,sheet_variable_wkbook):
     sheet = sheet_variable_wkbook.name
     df = pd.read_excel(path,sheet_name = sheet)
+    return df
 
 def remove_nas_dataframe(data_frame,header_column):
-    data_frame[data_frame[header_column].notna()]
+    return data_frame[data_frame[header_column].notna()]
     
 def get_nulls_in_dataframe(data_frame,header_column):
-    data_frame[data_frame[header_column].isnull()]
+    return data_frame[data_frame[header_column].isnull()]
 
 def create_column_dataframe(dataframe,new_column,content):
     dataframe[new_column] = content
+    return dataframe
+
+def delete_column_dataframe(dataframe,column_to_delete):
+    return dataframe.drop(column_to_delete,axis = 1)
 
 def new_filtered_dataframe(dataframe,filter,column_filter):
-    dataframe.loc[dataframe[column_filter] == filter]
+    return dataframe.loc[dataframe[column_filter] == filter]
 
+def verify_nas(df_series):
+    return df_series.isnull().any()
+
+def replace_pd(dataframe,column_name,original_value,new_value):
+    dataframe[column_name] = dataframe[column_name].replace(original_value,new_value) 
+    return dataframe
+
+        #replicate formulas behavior
+        
 def concat_dataframes(dataframe_top,dataframe_down):
-    pd.concat([dataframe_top,dataframe_down],ignore_index=True)
+    return pd.concat([dataframe_top,dataframe_down],ignore_index=True)
+
+def xlookup_pd(df_base,df_search,lookup_value,lookup_array,return_array,name_column):
+    df_base[name_column] = df_base[lookup_value].map(df_search.set_index(lookup_array)[return_array])
+    return df_base[name_column]
+
+def concat_pd(list_of_series,separator = None):
+    quantity = len(list_of_series)
+    if separator == None:
+        concat = list_of_series[0].astype(str) + list_of_series[1].astype(str)
+        if quantity > 2:
+            for column in range(2, quantity):
+                concat = concat + list_of_series[column].astype(str)
+    else:
+        sep = pd.Series(separator) * len(list_of_series[0])
+        concat = list_of_series[0].astype(str) + sep.astype(str) + list_of_series[1].astype(str)
+    return concat
+
+def remove_duplicates_pd(dataframe,column_look):
+    return dataframe.drop_duplicates(subset= column_look)
+
+def textjoin_pd(serie, separator = ","):
+    return separator.join(serie.dropna().astype(str).unique())
+
+
