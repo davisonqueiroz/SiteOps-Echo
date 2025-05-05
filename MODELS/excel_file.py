@@ -1,7 +1,7 @@
 import xlwings as xw
 import os 
 import pandas as pd
-
+import numpy as np
 class excel_file:
     def __init__(self,path = None,visibility = True, filtered = False):
         if path:
@@ -143,10 +143,14 @@ class excel_file:
     
     #creating and manipulation dataframes
 
-def new_dataframe(path,sheet_name,type = True,delimiter=None,encoding=None): #se True sera arquivo xlsx, false para arquivo csv
+def new_dataframe(path,sheet_name,type = True,delimiter=None,encoding=None,dtype = None): #se True sera arquivo xlsx, false para arquivo csv
     if type == True:
-        df = pd.read_excel(path,sheet_name=sheet_name)
-        return df
+        if dtype is not None:
+            df = pd.read_excel(path,sheet_name=sheet_name,dtype=dtype)
+            return df
+        else:
+            df = pd.read_excel(path,sheet_name=sheet_name)
+            return df
     else:
         df = pd.read_csv(path,delimiter,encoding)
         return df
@@ -176,7 +180,7 @@ def verify_nas(df_series):
     return df_series.isnull().any()
 
 def replace_pd(dataframe,column_name,original_value,new_value):
-    dataframe[column_name] = dataframe[column_name].replace(original_value,new_value) 
+    dataframe[column_name] = dataframe[column_name].astype(str).str.replace(original_value,new_value) 
     return dataframe
 
         #replicate formulas behavior
@@ -185,20 +189,25 @@ def concat_dataframes(dataframe_top,dataframe_down):
     return pd.concat([dataframe_top,dataframe_down],ignore_index=True)
 
 def xlookup_pd(df_base,df_search,lookup_value,lookup_array,return_array,name_column):
-    df_base[name_column] = df_base[lookup_value].map(df_search.set_index(lookup_array)[return_array])
-    return df_base[name_column]
+    df_no_dups = df_search.drop_duplicates(subset = lookup_array)
+
+    dict_search = df_no_dups.set_index(lookup_array)[return_array].to_dict()
+
+    df_base[name_column] = df_base[lookup_value].map(dict_search)
+    
+    return df_base
 
 def concat_pd(list_of_series,separator = None):
     quantity = len(list_of_series)
-    if separator == None:
-        concat = list_of_series[0].astype(str) + list_of_series[1].astype(str)
-        if quantity > 2:
-            for column in range(2, quantity):
-                concat = concat + list_of_series[column].astype(str)
+    if quantity == 2 and separator is not None:
+        concat = list_of_series[0].astype(str) + separator + list_of_series[1].astype(str)
     else:
-        sep = pd.Series(separator) * len(list_of_series[0])
-        concat = list_of_series[0].astype(str) + sep.astype(str) + list_of_series[1].astype(str)
+        concat = list_of_series[0].astype(str)
+        for i in range(1,quantity):
+            concat += list_of_series[i].astype(str)
     return concat
+
+ 
 
 def remove_duplicates_pd(dataframe,column_look):
     return dataframe.drop_duplicates(subset= column_look)

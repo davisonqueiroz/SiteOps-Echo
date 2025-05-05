@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QSize  # Importar QSize corretamente
 from PySide6.QtGui import QIcon
 from GUI.cards import Card
-import acoes
+import GUI.acoes as acoes
 
 class MainWindow(QWidget):
     def __init__(self):

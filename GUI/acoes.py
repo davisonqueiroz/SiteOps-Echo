@@ -1,4 +1,9 @@
-def funcao_botao_A1(): print("Botão A1 - Ação do Card 1")
+import MODELS.Cruzeiro_do_Sul.tecnico as tec
+
+file_msp = "GUI/__pycache__/tecnico (2).xlsx"
+file_exp = "GUI/__pycache__/exp-campus(E-6_n°12910) (1).xlsx"
+
+def funcao_botao_A1(): tecnico = tec.tecnicoCruzeiro(file_msp,file_exp)
 def funcao_botao_B1(): print("Botão B1 - Ação do Card 1")
 def funcao_botao_A2(): print("Botão A2 - Ação do Card 2")
 def funcao_botao_B2(): print("Botão B2 - Ação do Card 2")
