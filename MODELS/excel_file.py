@@ -212,7 +212,20 @@ def concat_pd(list_of_series,separator = None):
 def remove_duplicates_pd(dataframe,column_look):
     return dataframe.drop_duplicates(subset= column_look)
 
+def get_duplicates_pd(dataframe,column_look):
+    duplcates =  dataframe[dataframe.duplicated(subset=column_look,keep = False)]
+    duplicates_index = duplcates.index.tolist()
+    return duplcates,duplicates_index
+
 def textjoin_pd(serie, separator = ","):
     return separator.join(serie.dropna().astype(str).unique())
 
+def remove_specify_from_df(series_to_remove,dataframe,column_search):
+    dataframe = dataframe[~dataframe[column_search].isin(series_to_remove)]
+    return dataframe
+
+def associate_value_from(dataframe,condition_column,value_condition,destiny_column,destiny_value):
+    dataframe.loc[dataframe[condition_column] == value_condition,destiny_column] = destiny_value
+    return dataframe
+    
 

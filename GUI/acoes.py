@@ -1,10 +1,11 @@
 import MODELS.Cruzeiro_do_Sul.tecnico as tec
-
-file_msp = "GUI/__pycache__/tecnico (2).xlsx"
-file_exp = "GUI/__pycache__/exp-campus(E-6_n°12910) (1).xlsx"
+import MODELS.Cruzeiro_do_Sul.pos_grad_ead as pos
+file_msp = "ASSETS/ICONS/MSP.xlsx"
+file_exp = "ASSETS/ICONS/exp_campus.xlsx"
+file_relation = "ASSETS/ICONS/Relacao_polos.xlsx"
 
 def funcao_botao_A1(): tecnico = tec.tecnicoCruzeiro(file_msp,file_exp)
-def funcao_botao_B1(): print("Botão B1 - Ação do Card 1")
+def funcao_botao_B1(): pos_grad = pos.pos_grad_ead(file_msp,file_exp,file_relation)
 def funcao_botao_A2(): print("Botão A2 - Ação do Card 2")
 def funcao_botao_B2(): print("Botão B2 - Ação do Card 2")
 def funcao_botao_A3(): print("Botão A3 - Ação do Card 3")
