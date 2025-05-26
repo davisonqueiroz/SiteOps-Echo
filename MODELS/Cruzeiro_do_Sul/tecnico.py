@@ -13,7 +13,6 @@ class tecnicoCruzeiro:
         self.fill_in_campus_id()
         self.names_treatment()
         self.fill_in_msp()
-        self.saving_and_separing_pendings()
 
     def sheet_process(self,file_msp,file_campus):
         dtype_campus = {
@@ -42,6 +41,8 @@ class tecnicoCruzeiro:
         if ef.verify_nas(self.tec_nursing['campus_id']):
             self.pending_nursing = ef.get_nulls_in_dataframe(self.tec_nursing,'campus_id')
             self.tec_nursing = ef.remove_nas_dataframe(self.tec_nursing,'campus_id')
+        else:
+            self.pending_nursing = pd.DataFrame([["sem pendências"]])
         self.tec_nursing['concat'] = ef.concat_pd([self.tec_nursing['campus_id'],self.tec_nursing['ID_POLO']],";campus_code:")
         self.nursing_txt_join = ef.textjoin_pd(self.tec_nursing['concat'])
 
@@ -62,6 +63,8 @@ class tecnicoCruzeiro:
             if ef.verify_nas(nulls['campus_id']):
                 self.pending = ef.get_nulls_in_dataframe(nulls,'campus_id')
                 nulls = ef.remove_nas_dataframe(nulls,'campus_id')
+            else:
+                self.pending = pd.DataFrame([["sem pendências"]])
             self.port_tec = ef.concat_dataframes(self.port_tec,nulls)
 
     def names_treatment(self):
@@ -93,14 +96,19 @@ class tecnicoCruzeiro:
         if ef.verify_nas(self.msp['ID do Campus']):
             self.pending_msp = ef.get_nulls_in_dataframe(self.msp,'ID do Campus')
             self.msp = ef.remove_nas_dataframe(self.msp,'ID do Campus')
+        else:
+            self.pending_msp = pd.DataFrame([["sem pendências"]])
 
-    def saving_and_separing_pendings(self):
-        with pd.ExcelWriter("ASSETS/ICONS/tecnico_teste.xlsx",engine = 'openpyxl') as writer:
-            self.msp.to_excel(writer,sheet_name='Modelo Sem Parar',index= False)
-            if self.pending is not None:
-                self.pending.to_excel(writer,sheet_name='Pendencias portfolio',index= False)
-            if self.pending_nursing is not None:
-                self.pending_nursing.to_excel(writer,sheet_name='Pendencias enfermagem',index= False)
-            if self.pending_msp is not None:
-                self.pending_nursing.to_excel(writer,sheet_name='Pendencias MSP',index= False)
+    def saving_and_separing_pendings(self,path):
+        ef.save_multiple_dfs(path,[self.msp,self.pending,self.pending_nursing,self.pending_msp],['Modelo Sem Parar','Pendencias portfolio','Pendencias enfermagem','Pendencias MSP'])
+
+
+        # with pd.ExcelWriter("ASSETS/ICONS/tecnico_teste.xlsx",engine = 'openpyxl') as writer:
+        #     self.msp.to_excel(writer,sheet_name='Modelo Sem Parar',index= False)
+        #     if self.pending is not None:
+        #         self.pending.to_excel(writer,sheet_name='Pendencias portfolio',index= False)
+        #     if self.pending_nursing is not None:
+        #         self.pending_nursing.to_excel(writer,sheet_name='Pendencias enfermagem',index= False)
+        #     if self.pending_msp is not None:
+        #         self.pending_nursing.to_excel(writer,sheet_name='Pendencias MSP',index= False)
 

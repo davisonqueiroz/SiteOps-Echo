@@ -1,7 +1,7 @@
 import MODELS.excel_file as ef
 import pandas as pd
 import openpyxl
-
+import os
 class pos_grad_ead:
     def __init__(self,file_msp,file_campus,file_relation_campus):
         file_msp = file_msp
@@ -14,7 +14,6 @@ class pos_grad_ead:
         self.concat_and_join()
         self.concat_campus()
         self.separing_universities_msp()
-        # self.create_files_limited()
 
     def sheet_process(self,file_msp,file_exp,file_relation):
 
@@ -103,16 +102,21 @@ class pos_grad_ead:
             self.msp = ef.associate_value_from(self.msp,'Nome da IES','POSITIVO - PÓS-GRADUAÇÃO EAD','ID do Campus',self.textjoin_pos)
         print(self.msp)
 
-    def create_files_limited(self):
+    def create_files_limited(self,path):
         range_for = len(self.groups)
-        print(range_for)
+        # for i in range(range_for):
+        #     self.df_temp = ef.associate_value_from(self.msp_cruzeiro,'Nome da IES','CRUZEIRO DO SUL - PÓS EAD',"ID do Campus",self.groups[i])
+        #     with pd.ExcelWriter(f"ASSETS/ICONS/CRUZEIRO_POS_GRAD{i}.xlsx",engine='openpyxl') as writer:
+        #         self.df_temp.to_excel(writer,sheet_name ='Modelo Sem Parar', index= False)
+         
+        # with pd.ExcelWriter(f"ASSETS/ICONS/UNIPE_E_POSITIVO.xlsx",engine='openpyxl') as writer:
+        #     self.msp.to_excel(writer,sheet_name ='Modelo Sem Parar', index= False)
+
         for i in range(range_for):
             self.df_temp = ef.associate_value_from(self.msp_cruzeiro,'Nome da IES','CRUZEIRO DO SUL - PÓS EAD',"ID do Campus",self.groups[i])
-            with pd.ExcelWriter(f"ASSETS/ICONS/CRUZEIRO_POS_GRAD{i}.xlsx",engine='openpyxl') as writer:
-                self.df_temp.to_excel(writer,sheet_name ='Modelo Sem Parar', index= False)
-         
-        with pd.ExcelWriter(f"ASSETS/ICONS/UNIPE_E_POSITIVO.xlsx",engine='openpyxl') as writer:
-            self.msp.to_excel(writer,sheet_name ='Modelo Sem Parar', index= False)
+
+            ef.save_df(os.path.join(f"CRUZEIRO_POS_GRAD{i}.xlsx"),self.df_temp,'Modelo Sem Parar')
+        ef.save_df(os.path.join(path, "UNIPE_E_POSITIVO.xlsx"),self.msp,'Modelo Sem Parar')
 
             
                 
