@@ -22,7 +22,7 @@ class MainWindow(QMainWindow):
 
 
         #cria e seta o menu_bar
-        self.menu_bar = MenuBar("#FF7E29",97,self.main_layout,"#F5F5F5","#FF7E29",33,"#FA9653","#F5F5F5")
+        self.menu_bar = MenuBar("#FF7E29",100,self.main_layout,"#F5F5F5","#FF7E29",33,"#FA9653","#F5F5F5")
         self.menu_bar.create_menu_button("#FF7E29","#FA9653","ASSETS/ICONS/menu_icon.png")
         self.home_btn = self.menu_bar.add_sub_menu_button("        home","ASSETS/ICONS/home_icon.png")
         self.config = self.menu_bar.add_sub_menu_button("        Cruzeiro","ASSETS/ICONS/cruzeiro_icon.png")

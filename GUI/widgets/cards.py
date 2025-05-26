@@ -182,6 +182,14 @@ class Card(QFrame):
         else:
             self.paths[key_btn] = None
     
+    def set_directory(self,key_btn,side = "front"):
+        button = self.card_components[self.name_card][side][key_btn]
+        file_path = QFileDialog.getExistingDirectory(button, "Selecione o diretório", "", QFileDialog.ShowDirsOnly)
+        if file_path:
+            self.paths["save"] = file_path
+        else:
+            self.paths["save"] = None
+
     def set_text_btns(self,buttons,text):
         for button in buttons:
             self.card_components[self.name_card]["front"][button].setText(text)
