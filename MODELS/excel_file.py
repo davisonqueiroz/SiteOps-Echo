@@ -227,5 +227,14 @@ def remove_specify_from_df(series_to_remove,dataframe,column_search):
 def associate_value_from(dataframe,condition_column,value_condition,destiny_column,destiny_value):
     dataframe.loc[dataframe[condition_column] == value_condition,destiny_column] = destiny_value
     return dataframe
-    
+
+def save_df(full_path,dataframe,sheet_name):
+      with pd.ExcelWriter(full_path,engine='openpyxl') as writer:
+            dataframe.to_excel(writer,sheet_name =sheet_name, index= False)
+
+def save_multiple_dfs(full_path,dataframes,sheet_names):
+    with pd.ExcelWriter(full_path,engine='openpyxl') as writer:
+        for df,sheet in zip(dataframes,sheet_names):
+            df.to_excel(writer,sheet_name =sheet, index= False)
+
 
