@@ -63,7 +63,7 @@ class pos_grad_ead:
 
         self.textjoin_pos = ef.textjoin_pd(self.relation_positivo['concat'])
         self.textjoin_unipe = ef.textjoin_pd(self.relation_unipe['concat'])
-        print(len(self.relation_positivo))
+
 
     def concat_campus(self):
 
@@ -100,10 +100,18 @@ class pos_grad_ead:
             self.msp = ef.associate_value_from(self.msp,'Nome da IES','POSITIVO - PÓS-GRADUAÇÃO EAD','ID do Campus',self.campus_positivo)
         else:
             self.msp = ef.associate_value_from(self.msp,'Nome da IES','POSITIVO - PÓS-GRADUAÇÃO EAD','ID do Campus',self.textjoin_pos)
-        print(self.msp)
 
     def create_files_limited(self,path):
         range_for = len(self.groups)
+
+        for i in range(range_for):
+            self.df_temp = ef.associate_value_from(self.msp_cruzeiro,'Nome da IES','CRUZEIRO DO SUL - PÓS EAD',"ID do Campus",self.groups[i])
+
+            ef.save_df(os.path.join(path,f"CRUZEIRO_POS_GRAD{i}.xlsx"),self.df_temp,'Modelo Sem Parar')
+        ef.save_df(os.path.join(path, "UNIPE_E_POSITIVO.xlsx"),self.msp,'Modelo Sem Parar')
+
+            
+                
         # for i in range(range_for):
         #     self.df_temp = ef.associate_value_from(self.msp_cruzeiro,'Nome da IES','CRUZEIRO DO SUL - PÓS EAD',"ID do Campus",self.groups[i])
         #     with pd.ExcelWriter(f"ASSETS/ICONS/CRUZEIRO_POS_GRAD{i}.xlsx",engine='openpyxl') as writer:
@@ -111,15 +119,6 @@ class pos_grad_ead:
          
         # with pd.ExcelWriter(f"ASSETS/ICONS/UNIPE_E_POSITIVO.xlsx",engine='openpyxl') as writer:
         #     self.msp.to_excel(writer,sheet_name ='Modelo Sem Parar', index= False)
-
-        for i in range(range_for):
-            self.df_temp = ef.associate_value_from(self.msp_cruzeiro,'Nome da IES','CRUZEIRO DO SUL - PÓS EAD',"ID do Campus",self.groups[i])
-
-            ef.save_df(os.path.join(f"CRUZEIRO_POS_GRAD{i}.xlsx"),self.df_temp,'Modelo Sem Parar')
-        ef.save_df(os.path.join(path, "UNIPE_E_POSITIVO.xlsx"),self.msp,'Modelo Sem Parar')
-
-            
-                
 
 
 
