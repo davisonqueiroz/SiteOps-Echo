@@ -20,7 +20,7 @@ class MainWindow(QMainWindow):
 
         self.home = Home()
         self.cruzeiro = CruzeiroDoSul()
-        # self.utilites = Utilities()
+        self.utilites = Utilities()
 
 
         #cria e seta o menu_bar
@@ -38,7 +38,7 @@ class MainWindow(QMainWindow):
 
         self.stacks.addWidget(self.home)
         self.stacks.addWidget(self.cruzeiro)
-        # self.stacks.addWidget(self.utilites)
+        self.stacks.addWidget(self.utilites)
 
         self.main_layout.addWidget(self.central_frame)
 
