@@ -218,5 +218,9 @@ class Card(QFrame):
         for button in buttons:
             self.card_components[self.name_card]["front"][button].setText(self.text_buttons[button])
 
+    def get_selected_text(self):
+        if self.card_components[self.name_card]["front"]["combo_box"]:
+            cb_box = self.card_components[self.name_card]["front"]["combo_box"]
+            return cb_box.currentText()
 
     
