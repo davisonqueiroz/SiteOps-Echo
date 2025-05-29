@@ -237,4 +237,11 @@ def save_multiple_dfs(full_path,dataframes,sheet_names):
         for df,sheet in zip(dataframes,sheet_names):
             df.to_excel(writer,sheet_name =sheet, index= False)
 
+def get_rows(dataframe,interval_rows):
+    return dataframe.iloc[interval_rows]
+
+def remove_rows(dataframe,interval_rows):
+    dataframe = dataframe.reset_index(drop = True)
+    return dataframe.drop(interval_rows)
+
 
