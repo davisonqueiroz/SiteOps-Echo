@@ -47,9 +47,9 @@ class RemoverDuplicadas:
                 "Mensalidade sem desconto"
             ]
 
-            if self.type_table == "msp":
+            if self.type_table == "MSP":
                 colunas_para_comparacao = colunas_msp
-            elif self.type_table == "exp":
+            elif self.type_table == "EXP":
                 colunas_para_comparacao = colunas_exp
             else:
                 print("❌ Tipo de tabela não reconhecido.")
