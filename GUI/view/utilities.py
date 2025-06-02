@@ -1,12 +1,10 @@
 from GUI.content_area import *
 from GUI.widgets.cards import *
-from MODELS.Cruzeiro_do_Sul.pos_grad_ead import *
-from MODELS.Cruzeiro_do_Sul.tecnico import *
 from MODELS.Utilities.duplicates import *
 from MODELS.Utilities.csv_converter import *
 from MODELS.Utilities.fix_cities import *
 from MODELS.Utilities.divisor import *
-
+from MODELS.Utilities.exp_msp import *
 
 class Utilities(ContentArea):
     def __init__(self):
@@ -23,7 +21,7 @@ class Utilities(ContentArea):
         self.card_exp_msp = Card("exp_msp","#FF7E29")
         self.card_exp_msp.create_front_card("Exp para MSP","#FF7E29","#F5F5F5","#000000","#D4D4D4","#8148C9","#F5F5F5","#7D3FC9","Selecione a planilha")
         self.card_exp_msp.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione a planilha EXP. \n2.Clique em 'Gerar'\n\nIMPORTANTE: O arquivo será salvo na pasta original com 'MSP_' na frente do nome")
-        self.card_exp_msp.set_action_btn("btn_generate", self.process_files)   
+        self.card_exp_msp.set_action_btn("btn_generate", self.process_exp_msp)   
         
         self.card_duplicates = Card("duplicates","#FF7E29")
         self.card_duplicates.create_front_card("Remover Duplicadas","#FF7E29","#F5F5F5","#000000","#D4D4D4","#8148C9","#F5F5F5","#7D3FC9","Selecione a planilha")
@@ -49,15 +47,12 @@ class Utilities(ContentArea):
         self.add_card(self.card_divisor,"BOTTOM")
 
 
-    def process_files(self):
-            if self.card_tecnico.paths["btn_option1"] and self.card_tecnico.paths["btn_option2"]:
-                msp = self.card_tecnico.paths["btn_option2"]
-                exp = self.card_tecnico.paths["btn_option1"]
-                tecnico = tecnicoCruzeiro(msp,exp)
-                self.card_tecnico.set_save_manager("btn_generate")
-                path_save = self.card_tecnico.paths["save"]
-                tecnico.saving_and_separing_pendings(path_save)
-                self.card_tecnico.set_text_btns(["btn_option1","btn_option2"],"Selecione o arquivo")
+    def process_exp_msp(self):
+        path = self.card_exp_msp.paths["btn_option1"]
+        if path:
+            exp_converter = MSPConverter(path)
+            exp_converter.convert()
+            self.card_exp_msp.set_text_btns(["btn_option1"])
 
     def process_dup(self):
         selected = self.card_duplicates.get_selected_text()

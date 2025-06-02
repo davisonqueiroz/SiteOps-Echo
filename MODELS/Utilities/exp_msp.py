@@ -127,7 +127,7 @@ class MSPConverter:
     def convert(self):
         try:
             base_nome = os.path.splitext(os.path.basename(self.exp_file))[0]
-            msp_file = os.path.join(os.path.dirname(self.exp_file), f"MSP2_ {base_nome}.xlsx")
+            msp_file = os.path.join(os.path.dirname(self.exp_file), f"MSP_{base_nome}.xlsx")
 
             print(f"📂 Arquivo selecionado: {self.exp_file}")
             df = pd.read_excel(self.exp_file, engine='openpyxl')
