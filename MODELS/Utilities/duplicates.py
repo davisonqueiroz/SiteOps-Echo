@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+from GUI.widgets.notifications import Notification 
 
 class RemoverDuplicadas:
     def __init__(self, excel_file, type_table):
@@ -12,7 +13,7 @@ class RemoverDuplicadas:
 
     def remover(self):
         if not self.excel_file:
-            print("❌ Nenhum arquivo selecionado")
+            Notification.error("Nenhum arquivo selecionado","Selicionar um arquivo")
         
         try:
             # Gera o caminho de saída com base no nome do arquivo original
@@ -52,7 +53,7 @@ class RemoverDuplicadas:
             elif self.type_table == "EXP":
                 colunas_para_comparacao = colunas_exp
             else:
-                print("❌ Tipo de tabela não reconhecido.")
+                Notification.error("Tipo de tabela não reconhecida","Verificar o modelo da tabela")
                 return
 
             # Cria a coluna de chave única concatenada
@@ -76,10 +77,11 @@ class RemoverDuplicadas:
                 with pd.ExcelWriter(self.no_dup_file, engine='openpyxl') as writer:
                     self.df_no_dup.to_excel(writer, index=False)
                     self.df_dup.to_excel(writer, index=False, sheet_name='Duplicados')
-                    print(f"📁 Arquivo Excel salvo: {self.no_dup_file}")
+                    Notification.info("Arquivo Salvo",f"📁 Arquivo Excel salvo: {self.no_dup_file}")
             except Exception as e:
-                print(f"⚠️ Erro ao salvar o arquivo Excel: {e}")
+                Notification.error("Error ao Salvar",f"Erro ao salvar o arquivo Excel: {e}")
+        
         
         except Exception as e:
-            print(f"❌ Ocorreu um erro durante o processamento: {e}")
+            Notification.error("Error ao Salvar",f"Ocorreu um erro durante o processamento: {e}")
             return
