@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+from GUI.widgets.notifications import Notification
 
 class MSPConverter:
     def __init__(self,exp_file):
@@ -129,7 +130,6 @@ class MSPConverter:
             base_nome = os.path.splitext(os.path.basename(self.exp_file))[0]
             msp_file = os.path.join(os.path.dirname(self.exp_file), f"MSP_{base_nome}.xlsx")
 
-            print(f"📂 Arquivo selecionado: {self.exp_file}")
             df = pd.read_excel(self.exp_file, engine='openpyxl')
             df = df.drop(columns=[col for col in self.remove_columns if col in df.columns])
             df = df.rename(columns=self.offers_msp_dict)
@@ -141,20 +141,18 @@ class MSPConverter:
                     pos = df.columns.get_loc(ref_col) + 1
                     df.insert(loc=pos, column=new_col, value=default_val)
                 else:
-                    print(f"⚠️ Coluna de referência '{ref_col}' não encontrada. Não foi possível inserir '{new_col}'.")
+                    Notification.error("Erro metadata",f"⚠️ Coluna de referência '{ref_col}' não encontrada. Não foi possível inserir '{new_col}'.")
 
             if 'metadata' in df.columns:
                 metadata_parsed = df['metadata'].apply(self.parse_metadata)
                 for key, col_dest in self.metadata_mapping.items():
                     df[col_dest] = metadata_parsed.apply(lambda d: d.get(key, ''))
-                    print(f"✅ Coluna '{col_dest}' preenchida com metadata['{key}']")
                 df = df.drop(columns=['metadata'])
 
             if 'course_metadata' in df.columns:
                 course_metadata_parsed = df['course_metadata'].apply(self.parse_metadata)
                 for key, col_dest in self.course_metadata_mapping.items():
                     df[col_dest] = course_metadata_parsed.apply(lambda d: d.get(key, ''))
-                    print(f"✅ Coluna '{col_dest}' preenchida com metadata['{key}']")
                 df = df.drop(columns=['course_metadata'])
 
             for col in self.clean_columns:
@@ -162,7 +160,7 @@ class MSPConverter:
                     df[col] = ''
 
             df.to_excel(msp_file, index=False)
-            print(f"\n✅ Arquivo {msp_file} criado com sucesso com a estrutura MSP!")
+            Notification.info("Arquivo Salvo",f"\n✅ Arquivo {msp_file} criado com sucesso com a estrutura MSP!")
 
         except Exception as e:
-            print(f"❌ Ocorreu um erro durante o processamento: {e}")
+            Notification.error("Erro de processamento",f"❌ Ocorreu um erro durante o processamento: {e}")

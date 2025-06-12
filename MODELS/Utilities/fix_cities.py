@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 from MODELS.Utilities.dicionarios import lista_cidades
-
+from GUI.widgets.notifications import Notification
 
 class CorrigirCidades:
     def __init__(self, xlsx_file):
@@ -22,7 +22,7 @@ class CorrigirCidades:
             self.fixed_file = os.path.join(dir_name, new_name)
             return True
         except Exception as e:
-            print(f"⚠️ Erro ao ler o arquivo Excel: {e}")
+            Notification.error("Erro ao ler o arquivo",f"⚠️ Erro ao ler o arquivo Excel: {e}")
             return False
 
     def levenshtein_distance(self, s1, s2):
@@ -57,7 +57,7 @@ class CorrigirCidades:
 
     def fix_cities(self):
         if self.df is None:
-            print("⚠️ Dados não carregados.")
+            Notification.error("Erro ao carregar df","⚠️ Dados não carregados.")
             return
         for idx, row in self.df.iterrows():
             cidade, estado = row["city"], row["state"]
@@ -68,14 +68,13 @@ class CorrigirCidades:
 
     def salvar_arquivo(self):
         if not self.fixed_file:
-            print("⚠️ Caminho do arquivo de saída não definido.")
+            Notification.error("Erro no arquivo de saida","⚠️ Caminho do arquivo de saída não definido.")
             return
         try:
-            print(f"📝 Salvando arquivo em: {self.fixed_file}")
             self.df.to_excel(self.fixed_file, index=False, engine='openpyxl')
-            print(f"✅ Arquivo salvo como: {self.fixed_file}")
+            Notification.info("Arquivo salvo",f"✅ Arquivo salvo como: {self.fixed_file}")
         except Exception as e:
-            print(f"⚠️ Erro ao salvar o arquivo Excel: {e}")
+            Notification.error("Erro ao salvar o arquivo",f"⚠️ Erro ao salvar o arquivo Excel: {e}")
 
     def executar(self):
         if self.carregar_arquivo():

@@ -1,5 +1,6 @@
 import MODELS.excel_file as ef
 import os
+from GUI.widgets.notifications import Notification
 class TableDivisor:
     def __init__(self,excel_file,quantity_divisions):
         self.excel_file = excel_file
@@ -19,3 +20,4 @@ class TableDivisor:
             ef.save_df(os.path.join(path,f"{name_file}{i}.xlsx"),df_temp,"Sheet 1")
             self.table = ef.remove_rows(self.table,range(0,self.rows_for_division))
         ef.save_df(os.path.join(path,f"{name_file}{self.quantity_divisions}.xlsx"),self.table,"Sheet 1")
+        Notification.info("Arquivo Salvo",f"Arquivo salva na pasta {path}")

@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 from MODELS.Utilities.file_encoding import FileEncoding
+from GUI.widgets.notifications import Notification 
 
 class CSVConverter:
     def __init__(self, csv_file: str):
@@ -30,3 +31,4 @@ class CSVConverter:
         self.detectar_configurações()
         df = self.ler_csv()
         df.to_excel(self.excel_file, index=False)
+        Notification.info("Arquivo Salvo",f"📁 Arquivo Excel salvo: {self.excel_file}")
