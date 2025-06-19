@@ -45,7 +45,7 @@ A interface é composta por:
 
 # Como Utilizar
 
-Para utilizar o software basta fazer o download do arquivo .exe, encontrado em: [SiteOps-Echo](dist/SiteOps-Echo.exe)
+Para utilizar o software basta fazer o download do arquivo .exe, encontrado em: [SiteOps-Echo](https://github.com/davisonqueiroz/Byakko/releases/download/v1.0.0/SiteOps-Echo.exe)
 
 # Documentação Completa
 Para ter acesso a documentação completa do software, contendo mais detalhadamente sobre como utilizar e toda a estrutura do projeto explicado, acesse o Notion: https://www.notion.so/quero/SiteOps-Echo-1a671685286b80c4817fe9e0314f24a5
