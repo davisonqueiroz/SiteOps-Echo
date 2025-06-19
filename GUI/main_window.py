@@ -5,6 +5,7 @@ from GUI.menu_bar import *
 from GUI.view.home import *
 from GUI.view.cruzeiro import *
 from GUI.view.utilities import *
+from GUI.menu_bar import *
 
 class MainWindow(QMainWindow):
     def __init__(self):      
@@ -21,6 +22,8 @@ class MainWindow(QMainWindow):
         self.home = Home()
         self.cruzeiro = CruzeiroDoSul()
         self.utilites = Utilities()
+
+        self.setWindowIcon(QIcon(resource_path("ASSETS/ICONS/app_icon.ico")))
 
 
         #cria e seta o menu_bar

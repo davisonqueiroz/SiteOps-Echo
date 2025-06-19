@@ -1,6 +1,6 @@
 from GUI.qt_core import *
 import os
-
+import sys
 class MenuBar(QFrame):
     def __init__(self,color,width,layout_to_set,btn_text_color,bg_color,txt_pad,bg_hover,border_color):
         super().__init__()
@@ -36,7 +36,7 @@ class MenuBar(QFrame):
                     border-right: 5px solid {border_color};
                 }}
             """
-
+    
     def add_sub_menu_button(self,text,icon_path):
 
         btn_frame = QFrame()
@@ -48,9 +48,9 @@ class MenuBar(QFrame):
         button = QPushButton(text)
         font = QFont("Arial", 11)  
         button.setFont(font)
-        icon = QIcon(icon_path)
+        icon = QIcon(resource_path(icon_path))
     
-        button.setIcon(QIcon(icon))
+        button.setIcon((icon))
         button.setIconSize(QSize(30,30))
         button.setSizePolicy(QSizePolicy.Policy.Expanding,QSizePolicy.Policy.Expanding)
         button.setCheckable(True)
@@ -72,7 +72,7 @@ class MenuBar(QFrame):
         layout_frame.setContentsMargins(0,0,0,0)
         layout_frame.setSpacing(0)
         button = QPushButton()
-        icon = QIcon(icon_path)
+        icon = QIcon(resource_path(icon_path))
         button.setIconSize(QSize(40,40))
         button.setIcon(icon)
         button.setSizePolicy(QSizePolicy.Policy.Expanding,QSizePolicy.Policy.Expanding)
@@ -124,3 +124,9 @@ class MenuBar(QFrame):
     def set_action(self,button,action):
         button.clicked.connect(action)
 
+def resource_path(relative_path):
+        try:
+            base_path = sys._MEIPASS 
+        except AttributeError:
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
