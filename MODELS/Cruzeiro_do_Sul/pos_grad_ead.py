@@ -25,7 +25,8 @@ class pos_grad_ead:
         }
         dtype_msp = {
             'ID_POLO' : str,
-            'COD_CURSO' : str
+            'COD_CURSO' : str,
+            'Semestre de Ingresso': str,
         }
         dtype_relation = {
             'COD_POLO' : str
@@ -66,30 +67,27 @@ class pos_grad_ead:
 
 
     def concat_campus(self):
-
-        self.exp_cruzeiro['concat'] = ef.concat_pd([self.exp_cruzeiro['id'],self.exp_cruzeiro['metadata_code']],';campus_code:')
-        limit_cells = 32767
-        lenght_actually = 0
-        self.groups = []
-        result = None
-        init = 0
-        key = 0
-
-        for row,content in enumerate (self.exp_cruzeiro['concat']):
-            content_lenght = len(str(content))
-            if lenght_actually + content_lenght > limit_cells:
-                result = ef.textjoin_pd(self.exp_cruzeiro['concat'].iloc[init:row])
-                self.groups.append(result)
-                key += 1
-                init = row
-                lenght_actually = 0
-            lenght_actually += content_lenght
         
-        if init <= len(self.exp_cruzeiro):
-            result =  None
-            result = ef.textjoin_pd(self.exp_cruzeiro['concat'].iloc[init:])
+        keys = ef.concat_pd([self.exp_cruzeiro['id'],self.exp_cruzeiro['metadata_code']],';campus_code:')
+        keys_count = keys.str.len()
+        limit_cells = 32767
+        sum_cells = 0
+        self.groups = []
+        init = 0
+
+        for row in range(len(keys)):
+            current_length = keys_count.iloc[row] + 1
+            sum_cells += current_length
+            if limit_cells < sum_cells:
+                result = ef.textjoin_pd(keys.iloc[init:row])
+                self.groups.append(result)
+                init = row
+                sum_cells = keys_count.iloc[row] 
+
+        if init < len(keys):
+            result = ef.textjoin_pd(keys.iloc[init:])
             self.groups.append(result)
-                    
+
     def separing_universities_msp(self):
         self.msp_cruzeiro = ef.new_filtered_dataframe(self.msp,"CRUZEIRO DO SUL - PÓS EAD",'Nome da IES')
         self.msp = ef.remove_specify_from_df(self.msp_cruzeiro['Nome da IES'],self.msp,'Nome da IES')
@@ -103,6 +101,18 @@ class pos_grad_ead:
 
     def create_files_limited(self,path):
         range_for = len(self.groups)
+        form = lambda x: f"{x:.2f}"
+        columns = ['Porcentagem de desconto da bolsa (Fixo/1 º Semestre)', 'Porcentagem de desconto IES']
+        self.msp_cruzeiro.update({
+            col: self.msp_cruzeiro[col].apply(form) 
+            for col in columns
+            if col in self.msp_cruzeiro.columns
+        })
+        self.msp.update({
+            col: self.msp[col].apply(form) 
+            for col in columns
+            if col in self.msp.columns
+        })
 
         for i in range(range_for):
             self.df_temp = ef.associate_value_from(self.msp_cruzeiro,'Nome da IES','CRUZEIRO DO SUL - PÓS EAD',"ID do Campus",self.groups[i])
