@@ -37,7 +37,7 @@ class SheetManipulation:
     def load(self):
         if self._file_type_is_ready():
             self._set_sheet_type()
-            if self.file_type == ".xslx":
+            if self.file_type == ".xlsx":
                 return self._load_xlsx()
             else:
                 return self._load_csv()
@@ -150,7 +150,7 @@ class SheetManipulation:
             return False
         
     def _set_sheet_name(self):
-        if self.sheet_name is None and self.sheet_type == ".xslx":
+        if self.sheet_name is None and self.sheet_type == ".xlsx":
             wk = load_workbook(self.path,read_only=True,data_only=True)
             self. sheet_name = wk.active()
 
