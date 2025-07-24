@@ -29,15 +29,17 @@ class SheetManipulation:
         extension = self._detect_extension(self.path)
         if extension not in ['.xlsx','.csv']:
             raise ValueError(f"Tipo de arquivo {extension} não suportado. Selecione um arquivo '.xlsx' ou '.csv' e tente novamente.")
-        self.file_type = extension
+        return extension
      
     def _detect_extension(self,path):
         return os.path.splitext(path)[1].lower()
 
     def load(self):
         if self._file_type_is_ready():
+            if self.sheet_name is None and self.file_type == ".xlsx":
+                self._set_sheet_name() 
             self._set_sheet_type()
-            if self.file_type == ".xslx":
+            if self.file_type == ".xlsx":
                 return self._load_xlsx()
             else:
                 return self._load_csv()
@@ -72,40 +74,43 @@ class SheetManipulation:
             #//////// xlsx configurations ////////
 
     def _load_xlsx(self):
+        if not self.xlsx_is_ready():
+            raise ValueError ("Informações de carregamento incorretas. Confira o dtype e sheet_name")
         if self.sheet_type == "msp_offers":
             self.set_msp_offers_dtype()
-            if  self.xlsx_is_ready():
-                try:
-                    dataframe = pd.read_excel(self.path,sheet_name=self.sheet_name,dtype=self.dtype)
-                    return self.adjust_percentages_in_msp(dataframe)
-                except Exception as e:
-                    raise ValueError (f"Erro ao carregar planilha Excel: {e}")
+            try:
+                dataframe = pd.read_excel(self.path,sheet_name=self.sheet_name,dtype=self.dtype)
+                return self.adjust_percentages_in_msp(dataframe)
+            except Exception as e:
+                raise ValueError (f"Erro ao carregar planilha Excel: {e}")
         elif self.sheet_type == "exp_offers":
-            if  self.xlsx_is_ready():
-                try:
-                    return pd.read_excel(self.path,sheet_name=self.sheet_name)
-                except Exception as e:
-                    raise ValueError (f"Erro ao carregar planilha Excel: {e}")
+            try:
+                return pd.read_excel(self.path,sheet_name=self.sheet_name)
+            except Exception as e:
+                raise ValueError (f"Erro ao carregar planilha Excel: {e}")
+        elif self.sheet_type == "exp_campus":
+            try:
+                return pd.read_excel(self.path,sheet_name=self.sheet_name,dtype= self.dtype)
+            except Exception as e:
+                raise ValueError (f"Erro ao carregar planilha Excel: {e}")
         elif self.sheet_type == "others":
-             if  self.xlsx_is_ready():
-                try:
-                    return pd.read_excel(self.path,sheet_name=self.sheet_name)
-                except Exception as e:
-                    raise ValueError (f"Erro ao carregar planilha Excel: {e}")
-        else:
-            raise ValueError ("Erro ao carregar planilha. Tipo de planilha não aceito")
+            try:
+                return pd.read_excel(self.path,sheet_name=self.sheet_name)
+            except Exception as e:
+                raise ValueError (f"Erro ao carregar planilha Excel: {e}")
+
         
     def adjust_percentages_in_msp(self,dataframe):
         percentage_columns = ['Porcentagem de desconto da bolsa (Fixo/1 º Semestre)',
-                             'Porcentagem total de desconto da bolsa \n(2º Semestre)',
-                             'Porcentagem total de desconto da bolsa \n(3º Semestre)',
-                             'Porcentagem total de desconto da bolsa \n(4º Semestre)',
-                             'Porcentagem total de desconto da bolsa \n(5º Semestre)',
-                             'Porcentagem total de desconto da bolsa \n(6º Semestre)',
-                             'Porcentagem total de desconto da bolsa \n(7º Semestre)',
-                             'Porcentagem total de desconto da bolsa \n(8º Semestre)',
-                             'Porcentagem total de desconto da bolsa \n(9º Semestre)',
-                             'Porcentagem total de desconto da bolsa \n(10º Semestre)',
+                             'Porcentagem total de desconto da bolsa\n(2º Semestre)',
+                             'Porcentagem total de desconto da bolsa\n(3º Semestre)',
+                             'Porcentagem total de desconto da bolsa\n(4º Semestre)',
+                             'Porcentagem total de desconto da bolsa\n(5º Semestre)',
+                             'Porcentagem total de desconto da bolsa\n(6º Semestre)',
+                             'Porcentagem total de desconto da bolsa\n(7º Semestre)',
+                             'Porcentagem total de desconto da bolsa\n(8º Semestre)',
+                             'Porcentagem total de desconto da bolsa\n(9º Semestre)',
+                             'Porcentagem total de desconto da bolsa\n(10º Semestre)',
                              'Porcentagem de desconto IES',
                              'Porcentagem de desconto IES (1º semestre)',
                              'Porcentagem de desconto IES (2º semestre)',
@@ -141,18 +146,19 @@ class SheetManipulation:
         }
 
     def xlsx_is_ready(self):
-        if self.sheet_name and self.dtype is not None:
+        if self.sheet_name:
             return True
         elif self.sheet_name is None and self.sheet_type == "others":
             self._set_sheet_name()
-            return True
+            return self.sheet_name is not None
         else:
             return False
         
     def _set_sheet_name(self):
-        if self.sheet_name is None and self.sheet_type == ".xslx":
-            wk = load_workbook(self.path,read_only=True,data_only=True)
-            self. sheet_name = wk.active()
+        if self.sheet_name is None and self.file_type == ".xlsx":
+            wb = load_workbook(self.path, read_only=True, data_only=True)
+            self.sheet_name = wb.sheetnames[0] 
+            wb.close()
 
         #//////// csv configurations ////////
 
