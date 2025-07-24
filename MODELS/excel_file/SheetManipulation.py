@@ -160,6 +160,7 @@ class SheetManipulation:
             self.sheet_name = wb.sheetnames[0] 
             wb.close()
 
+
         #//////// csv configurations ////////
 
     def _load_csv(self):
