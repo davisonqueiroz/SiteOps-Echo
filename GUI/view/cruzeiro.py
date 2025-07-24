@@ -1,7 +1,7 @@
 from GUI.content_area import *
 from GUI.widgets.cards import *
 from MODELS.Cruzeiro_do_Sul.pos_grad_ead import *
-from MODELS.Cruzeiro_do_Sul.tecnico import *
+from MODELS.Cruzeiro_do_Sul.tecnico import tecnicoCruzeiro
 from GUI.widgets.notifications import *
 
 
@@ -41,12 +41,11 @@ class CruzeiroDoSul(ContentArea):
                     if not path_save:
                      Notification.error("DIretório inválido","Erro ao tentar gerar planilha final. Diretório não selecionado ou inválido. Execute a operação novamente, selecionando um diretório válido.")
                     else:
-                        tecnico.saving_and_separing_pendings(path_save)
+                        tecnico.load(path_save)
                         Notification.info("Operação finalizada","Planilha gerada com sucesso.")
                     self.card_tecnico.set_text_btns(["btn_option1","btn_option2"])
                 except Exception as e:
-                     Notification.error("Arquivos incorretos","Erro ao tentar gerar planilha final. Verificar arquivos selecionados e ordem de seleção")
-                 
+                     Notification.error("Arquivos incorretos",f"Erro ao tentar gerar planilha final. Verificar arquivos selecionados e ordem de seleção \n {e}")    
             else:
                  Notification.error("Arquivos não selecionados","Necessário selecionar os arquivos para execução da operação. Tente novamente após selecioná-los")
 
