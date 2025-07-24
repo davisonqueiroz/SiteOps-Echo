@@ -47,7 +47,7 @@ class DataFrameUtils:
     def concat_series_with_separator(list_of_series,separator = None):
         quantity = len(list_of_series)
         if quantity == 2 and separator is not None:
-            concat = list_of_series[0].astype(str) + separator + list_of_series[1].astype(str)
+            concat = list_of_series[0].astype(str).str.replace(r"\.0", "", regex=True) + separator + list_of_series[1].astype(str).str.replace(r"\.0$", "", regex=True)
         else:
             concat = list_of_series[0].astype(str)
             for i in range(1,quantity):
