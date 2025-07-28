@@ -195,3 +195,41 @@ class SheetManipulation:
             elif "," in first_row:
                 self.delimiter = ","
     
+    def convert_to_msp_offers_and_load(self, relation_headers : dict):
+
+        msp_headers = ['Nome da IES', 'ID da IES', 'Nome do Campus',
+       'ID do Campus', 'Nome do Curso', 'Grau', 'Modalidade',
+       'Turno', 'Tipo de duração do curso', 'Duração do Curso',
+       'Quantidade de Parcelas', 'Qual valor usar?\n% ou R$',
+       'Mensalidade sem desconto', 'Mensalidade com desconto',
+       'Porcentagem de desconto da bolsa (Fixo/1 º Semestre)',
+       'Porcentagem total de desconto da bolsa\n(2º Semestre)',
+       'Mensalidade com desconto\n(2º Semestre)', 'Mensalidade balcão',
+       'Porcentagem de desconto IES', 'Data de Início da Oferta',
+       'Data de Fim da Oferta', 'LIMITADA?', 'Quantidade de Vagas',
+       'Semestre de Ingresso', 'Benefício 1 (Chave OSC)',
+       'Benefício 2 (Chave OSC)', 'Avisos', 'Benefícios Extras', 'Campanha',
+       'Frequência das aulas', 'Taxa de matrícula', 'Data de início das aulas',
+       'Carga horária do Curso (em horas)', 'TCC Obrigatório?', 'Restrita?',
+       'Tipo de restrição (systems:)', 'ecode_pool_name', 'COD CURSO',
+       'COD IES', 'COD CAMPUS', 'COD TIPO GRAD', 'COD TURNO', 'COD CURSO PAI',
+       'COD CAMPUS PAI', 'CONCURSO', 'CodCursoVest', 'CodCursoIES',
+       'NomeCurso', 'TurnoMetadata', 'CURRICULO', 'CodCampus', 'CodCampanha',
+       'affiliate_link', 'tags']
+        
+        self.set_msp_offers_dtype()
+
+        dataframe_origin = pd.read_excel(self.path)
+        dataframe_msp = pd.DataFrame(columns=msp_headers)
+        for header,path_header in relation_headers.items():
+            if path_header in dataframe_origin.columns:
+                dataframe_msp[header] = dataframe_origin[path_header]
+            else:
+                raise KeyError (f"Coluna {path_header} inválida. Não encontrada na planilha.")
+        dataframe_msp  = dataframe_msp.astype({
+            col: tipo
+            for col, tipo in self.dtype.items()
+            if col in dataframe_msp.columns
+        })
+        return self.adjust_percentages_in_msp(dataframe_msp)
+    
