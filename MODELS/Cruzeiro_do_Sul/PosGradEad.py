@@ -4,7 +4,7 @@ import pandas as pd
 import openpyxl
 import os
 from datetime import date
-class pos_grad_ead:
+class PosGradEadCruzeiro:
     def __init__(self,offer_file,file_campus,file_ratio_campus):
         self.headers_transform = {
             " CÓDIGO DA IES" : "Nome da IES",  
