@@ -59,6 +59,10 @@ class DataFrameUtils:
         return dataframe.drop_duplicates(subset= header_name)
     
     @staticmethod
+    def get_duplicates_by_column(dataframe,header_name):
+        return dataframe[dataframe.duplicated(subset=header_name, keep=False)] 
+    
+    @staticmethod
     def get_duplicates_and_position(dataframe,column_name):
         duplicates =  dataframe[dataframe.duplicated(subset=column_name,keep = False)]
         duplicates_index = duplicates.index.tolist()
