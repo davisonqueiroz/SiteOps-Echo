@@ -58,6 +58,11 @@ class SheetManipulation:
                 return
         self.sheet_type =  "others"
 
+    def get_sheet_type(self):
+        if self.sheet_type is None:
+            self._set_sheet_type()
+        return self.sheet_type
+    
     def _get_headers(self):
         if self.file_type == ".xlsx":
             workbook = load_workbook(self.path,read_only=True,data_only=True)
