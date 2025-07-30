@@ -47,18 +47,10 @@ class RemoverDuplicadas:
         base_nome = os.path.splitext(os.path.basename(self.excel_file))[0]
         self.no_dup_file = os.path.join(os.path.dirname(self.excel_file), f"No_dup_{base_nome}.xlsx")
 
-        print('1------------')
-        print(self.no_dup_file)
-
         colunas_para_comparacao = self.set_columns_to_compare()
-
-        print('2------------')
         self.df_no_dup= dfu.remove_duplicates_by_columns(self.df,colunas_para_comparacao)
-        print('3------------')
         self.df_dup = dfu.get_duplicates_by_column(self.df,colunas_para_comparacao)
-        print('4------------')
         self.save()
-        print('5------------')  
 
     def save(self):
         try:
