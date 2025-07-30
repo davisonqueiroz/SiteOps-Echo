@@ -89,6 +89,7 @@ class SheetManipulation:
             except Exception as e:
                 raise ValueError (f"Erro ao carregar planilha Excel: {e}")
         elif self.sheet_type == "exp_campus":
+            self.set_exp_campus_dtype()
             try:
                 return pd.read_excel(self.path,sheet_name=self.sheet_name,dtype= self.dtype)
             except Exception as e:
