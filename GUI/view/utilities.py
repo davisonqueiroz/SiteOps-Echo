@@ -26,8 +26,6 @@ class Utilities(ContentArea):
         self.card_duplicates = Card("duplicates","#FF7E29")
         self.card_duplicates.create_front_card("Remover Duplicadas","#FF7E29","#F5F5F5","#000000","#D4D4D4","#8148C9","#F5F5F5","#7D3FC9","Selecione a planilha")
         self.card_duplicates.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione o modelo da planilha. \n2. Selecione a planilha no modelo correto.\n3.Clique em 'Gerar'\n\nIMPORTANTE: O arquivo é salvo na pasta original com 'no_dup_' na frente do nome")
-        cb_box_duplicates = self.card_duplicates.create_combobox(["MSP", "EXP"])
-        self.card_duplicates.add_component_card(cb_box_duplicates,"combobox")
         self.card_duplicates.set_action_btn("btn_generate", self.process_dup)
         
         self.card_csv = Card("csvtoxlsx","#FF7E29")
@@ -39,7 +37,7 @@ class Utilities(ContentArea):
         self.card_fix_cities.create_front_card("Corrigir Cidades","#FF7E29","#F5F5F5","#000000","#D4D4D4","#8148C9","#F5F5F5","#7D3FC9","Selecione a planilha")
         self.card_fix_cities.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione a planilha MSP de Campus. \n2.Clique em 'Gerar'\n\nIMPORTANTE: O arquivo será salvo na pasta original com 'fixed_cities_' na frente do nome")
         self.card_fix_cities.set_action_btn("btn_generate", self.process_fix_cities)        
-        
+
         self.add_card(self.card_exp_msp,"TOP")
         self.add_card(self.card_duplicates,"TOP")
         self.add_card(self.card_csv,"TOP")
@@ -55,11 +53,10 @@ class Utilities(ContentArea):
             self.card_exp_msp.set_text_btns(["btn_option1"])
 
     def process_dup(self):
-        selected = self.card_duplicates.get_selected_text()
         path = self.card_duplicates.paths["btn_option1"]
-        if path and selected:
-            dup = RemoverDuplicadas(path,selected)
-            dup.remover()
+        if path:
+            dup = RemoverDuplicadas(path)
+            dup.execute()
             self.card_duplicates.set_text_btns(["btn_option1"])
 
     def process_csv_converter(self):
