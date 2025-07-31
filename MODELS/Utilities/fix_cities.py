@@ -1,41 +1,29 @@
 import os
 import pandas as pd
 import numpy as np
+from MODELS.excel_file.SheetManipulation import SheetManipulation as sma
+from MODELS.excel_file.DataFrameUtils import DataFrameUtils as dfu
 from MODELS.Utilities.dicionarios import lista_cidades
 from GUI.widgets.notifications import Notification
 
 class CorrigirCidades:
     def __init__(self, xlsx_file):
-        self.xlsx_file = xlsx_file
         self.lista_cidades = lista_cidades
-        self.df = None
-        self.fixed_file = None
-    
-    def carregar_arquivo(self):
-        if not self.xlsx_file:
-            return False
-        try:
-            self.df = pd.read_excel(self.xlsx_file)
-            base_name = os.path.basename(self.xlsx_file)  # pega só o nome do arquivo
-            dir_name = os.path.dirname(self.xlsx_file)    # pega o caminho do diretório
-            new_name = "fixed_cities_" + base_name
-            self.fixed_file = os.path.join(dir_name, new_name)
-            return True
-        except Exception as e:
-            Notification.error("Erro ao ler o arquivo",f"⚠️ Erro ao ler o arquivo Excel: {e}")
-            return False
+        self.df = sma(xlsx_file).load()
+        base_name = os.path.basename(xlsx_file)
+        dir_name = os.path.dirname(xlsx_file)
+        new_name = "fixed_cities_" + base_name
+        self.fixed_file = os.path.join(dir_name, new_name)
 
     def levenshtein_distance(self, s1, s2):
         len_s1, len_s2 = len(s1), len(s2)
         dp = np.zeros((len_s1 + 1, len_s2 + 1), dtype=int)
 
-        # Inicializa a matriz
         for i in range(len_s1 + 1):
             dp[i][0] = i
         for j in range(len_s2 + 1):
             dp[0][j] = j
 
-        # Preenche a matriz
         for i in range(1, len_s1 + 1):
             for j in range(1, len_s2 + 1):
                 if s1[i - 1] == s2[j - 1]:  
@@ -66,18 +54,7 @@ class CorrigirCidades:
                 cidade_corrigida = self.encontrar_correspondente(cidade, cidades_estado)
                 self.df.at[idx, "city"] = cidade_corrigida
 
-    def salvar_arquivo(self):
-        if not self.fixed_file:
-            Notification.error("Erro no arquivo de saida","⚠️ Caminho do arquivo de saída não definido.")
-            return
-        try:
-            self.df.to_excel(self.fixed_file, index=False, engine='openpyxl')
-            Notification.info("Arquivo salvo",f"✅ Arquivo salvo como: {self.fixed_file}")
-        except Exception as e:
-            Notification.error("Erro ao salvar o arquivo",f"⚠️ Erro ao salvar o arquivo Excel: {e}")
-
     def executar(self):
-        if self.carregar_arquivo():
-            self.fix_cities()
-            self.salvar_arquivo()
-    
+        self.fix_cities()
+        dfu.save_dataframe(self.df, self.fixed_file,"MSP_Cities_Fixed")
+        Notification.info("Correção de Cidades", f"✅ Correção de cidades concluída. Arquivo salvo como: {self.fixed_file}")
