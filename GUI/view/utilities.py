@@ -25,7 +25,7 @@ class Utilities(ContentArea):
         
         self.card_duplicates = Card("duplicates","#FF7E29")
         self.card_duplicates.create_front_card("Remover Duplicadas","#FF7E29","#F5F5F5","#000000","#D4D4D4","#8148C9","#F5F5F5","#7D3FC9","Selecione a planilha")
-        self.card_duplicates.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione o modelo da planilha. \n2. Selecione a planilha no modelo correto.\n3.Clique em 'Gerar'\n\nIMPORTANTE: O arquivo é salvo na pasta original com 'no_dup_' na frente do nome")
+        self.card_duplicates.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione o modelo da planilha. \n2. Clique em 'Gerar'\n\nIMPORTANTE: O arquivo é salvo na pasta original com 'no_dup_' na frente do nome")
         self.card_duplicates.set_action_btn("btn_generate", self.process_dup)
         
         self.card_csv = Card("csvtoxlsx","#FF7E29")
