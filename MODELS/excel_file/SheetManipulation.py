@@ -171,15 +171,18 @@ class SheetManipulation:
 
     def _load_csv(self):
         self.set_encoding()
+        print(f"Encoding detectado: {self.encoding}")
         self.set_delimiter()
+        print(f"Delimitador detectado: {self.delimiter}")
         if self.csv_is_ready():
             try:
-                return pd.read_csv(self.path,self.delimiter,self.encoding)
+                return pd.read_csv(self.path,delimiter=self.delimiter,encoding=self.encoding)
             except Exception as e:
                 raise ValueError (f"Erro ao carregar planilha Excel: {e}")
 
     def csv_is_ready(self):
         if self.delimiter and self.encoding is not None:
+            print("CSV está pronto para ser carregado")
             return True
         else:
             return False
@@ -191,6 +194,7 @@ class SheetManipulation:
         
     def set_delimiter(self):
         if self.encoding is None:
+            print("Encoding não definido. Defina o encoding antes de definir o delimitador.")
             raise ValueError()
         with open(self.path, "r", encoding=self.encoding) as f:
             first_row = f.readline()
