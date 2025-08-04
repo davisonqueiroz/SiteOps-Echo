@@ -174,7 +174,7 @@ class SheetManipulation:
         self.set_delimiter()
         if self.csv_is_ready():
             try:
-                return pd.read_csv(self.path,self.delimiter,self.encoding)
+                return pd.read_csv(self.path,delimiter=self.delimiter,encoding=self.encoding)
             except Exception as e:
                 raise ValueError (f"Erro ao carregar planilha Excel: {e}")
 
