@@ -200,7 +200,7 @@ class Card(QFrame):
 
     def set_selector_manager(self,key_btn,side = "front"):
         button = self.card_components[self.name_card][side][key_btn]
-        file_path,_ = QFileDialog.getOpenFileName(button,"Selecione um arquivo ","","Arquivos Excel(*.xlsx *.csv)")
+        file_path,_ = QFileDialog.getOpenFileName(button,"Selecione um arquivo ","","Arquivos Excel(*.xlsx *.csv *.xlsb)")
         if file_path:
             self.paths[key_btn] = file_path
         else:

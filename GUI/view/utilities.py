@@ -5,6 +5,7 @@ from MODELS.Utilities.csv_converter import *
 from MODELS.Utilities.fix_cities import *
 from MODELS.Utilities.divisor import *
 from MODELS.Utilities.exp_msp import *
+from MODELS.Utilities.lote_kroton import *
 
 class Utilities(ContentArea):
     def __init__(self):
@@ -36,13 +37,19 @@ class Utilities(ContentArea):
         self.card_fix_cities = Card("fix_cities","#FF7E29")
         self.card_fix_cities.create_front_card("Corrigir Cidades","#FF7E29","#F5F5F5","#000000","#D4D4D4","#8148C9","#F5F5F5","#7D3FC9","Selecione a planilha")
         self.card_fix_cities.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione a planilha MSP de Campus. \n2.Clique em 'Gerar'\n\nIMPORTANTE: O arquivo será salvo na pasta original com 'fixed_cities_' na frente do nome")
-        self.card_fix_cities.set_action_btn("btn_generate", self.process_fix_cities)        
+        self.card_fix_cities.set_action_btn("btn_generate", self.process_fix_cities)    
+
+        self.kroton_lote = Card("kroton_lote","#FF7E29")
+        self.kroton_lote.create_front_card("kroton lote","#FF7E29","#F5F5F5","#000000","#D4D4D4","#8148C9","#F5F5F5","#7D3FC9","Selecione a planilha")
+        self.kroton_lote.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione a planilha de lote. \n2.Clique em 'Gerar'\n\nIMPORTANTE: O arquivo será salvo na pasta original com 'fixed_cities_' na frente do nome")
+        self.kroton_lote.set_action_btn("btn_generate", self.process_kroton_lote)     
 
         self.add_card(self.card_exp_msp,"TOP")
         self.add_card(self.card_duplicates,"TOP")
         self.add_card(self.card_csv,"TOP")
         self.add_card(self.card_fix_cities,"BOTTOM")
         self.add_card(self.card_divisor,"BOTTOM")
+        self.add_card(self.kroton_lote,"BOTTOM")
 
 
     def process_exp_msp(self):
@@ -84,4 +91,15 @@ class Utilities(ContentArea):
              div.create_files(path_save)
              self.card_divisor.set_text_btns(["btn_option1"])
 
-         
+    def process_kroton_lote(self):
+        path = self.kroton_lote.paths["btn_option1"]
+        if path:
+            kroton = KrotonLote(path)
+            self.kroton_lote.set_save_manager("btn_generate")
+            path_save = self.kroton_lote.paths["save"]
+            if not path_save:
+                    Notification.error("Diretório inválido","Erro ao tentar gerar planilha final. Diretório não selecionado ou inválido. Execute a operação novamente, selecionando um diretório válido.")
+            else:
+                kroton.load(path_save)
+                Notification.info("Operação finalizada","Planilha gerada com sucesso.")
+            self.kroton_lote.set_text_btns(["btn_option1"])

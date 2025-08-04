@@ -10,7 +10,10 @@ class SheetManipulation:
         "exp_offers" : ["university_id", "campus_id", "name_from_university", "level", "kind"],
         "csv_kroton" : ["match_key", "campus_name", "max_payments", "full_price", "metadata_course_id"],
         "msp_campus" : ["ID da IES", "IES", "Nome de Exibição", "Nome", "Logradouro", "Número"],
-        "exp_campus" : ["id", "name", "education_group_id", "metadata_code", "match_codes"]
+        "exp_campus" : ["id", "name", "education_group_id", "metadata_code", "match_codes"],
+        "lote_kroton" :["CHAVE", "LOTE", "IES", "COD_OFERTA_POLO", "DIA DA SEMANA"]
+
+
     }
     def __init__(self,path,sheet_name = None):
         self.path = path
@@ -27,8 +30,8 @@ class SheetManipulation:
         if self.path is None:
             raise FileNotFoundError(f"Caminho de arquivo inválido: {self.path}")
         extension = self._detect_extension(self.path)
-        if extension not in ['.xlsx','.csv']:
-            raise ValueError(f"Tipo de arquivo {extension} não suportado. Selecione um arquivo '.xlsx' ou '.csv' e tente novamente.")
+        if extension not in ['.xlsx','.csv','.xlsb']:
+            raise ValueError(f"Tipo de arquivo {extension} não suportado. Selecione um arquivo '.xlsx', '.xlsb' ou '.csv' e tente novamente.")
         return extension
      
     def _detect_extension(self,path):
@@ -36,11 +39,13 @@ class SheetManipulation:
 
     def load(self):
         if self._file_type_is_ready():
-            if self.sheet_name is None and self.file_type == ".xlsx":
+            if self.sheet_name is None and self.file_type in [".xlsx", ".xlsb"]:
                 self._set_sheet_name() 
             self._set_sheet_type()
-            if self.file_type == ".xlsx":
+            if  self.file_type == ".xlsx":
                 return self._load_xlsx()
+            elif self.file_type == ".xlsb":
+                return self._load_xlsb()
             else:
                 return self._load_csv()
 
@@ -70,6 +75,9 @@ class SheetManipulation:
             headers = [cell.value for cell in next(sheet.iter_rows(max_row=1))]
             workbook.close()
             return headers
+        elif self.file_type == ".xlsb":
+            dataframe = pd.read_excel(self.path, engine='pyxlsb', nrows=0)
+            return list(dataframe.columns)
         else:
             with open(self.path, "r", encoding=self.encoding) as f:
                 line = f.readline()
@@ -104,8 +112,21 @@ class SheetManipulation:
                 return pd.read_excel(self.path,sheet_name=self.sheet_name)
             except Exception as e:
                 raise ValueError (f"Erro ao carregar planilha Excel: {e}")
+            
+    #//////// xlsb configurations ////////
+            
+    def _load_xlsb(self):
+        if self.sheet_type == "lote_kroton":
+            self.set_msp_offers_dtype()
+            try:
+                dataframe = pd.read_excel(self.path, engine= 'pyxlsb')
+                return self.adjust_columns_kroton(dataframe)
+            except Exception as e:
+                raise ValueError (f"Erro ao carregar planilha Excel: {e}")
+        else:
+            raise ValueError ('modelo de planilha inválido')
+            
 
-        
     def adjust_percentages_in_msp(self,dataframe):
         percentage_columns = ['Porcentagem de desconto da bolsa (Fixo/1 º Semestre)',
                              'Porcentagem total de desconto da bolsa\n(2º Semestre)',
@@ -238,4 +259,25 @@ class SheetManipulation:
             if col in dataframe_msp.columns
         })
         return self.adjust_percentages_in_msp(dataframe_msp)
-    
+
+    def adjust_columns_kroton(self,dataframe):
+        values_columns = [ 
+        "PRECO BRUTO",
+        "% BOLSA 1",
+        "PRECO BOLSA 1",
+        "% BOLSA 1 S/ PONTUALIDADE",
+        "% BOLSA 2",
+        "PRECO BOLSA 2",
+        "% BOLSA 2 S/ PONTUALIDADE",
+        "PONTUALIDADE",
+        "PRECO BALCAO",
+        "DIF BALCAO%"
+    ]
+        lambda_apply = lambda x: f"{x:.2f}"
+        dataframe.update({
+            col: dataframe[col].apply(lambda_apply)
+            for col in values_columns
+            if col in dataframe.columns
+        })
+        return dataframe
+ 
