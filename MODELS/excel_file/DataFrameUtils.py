@@ -47,7 +47,7 @@ class DataFrameUtils:
     def concat_series_with_separator(list_of_series,separator = None):
         quantity = len(list_of_series)
         if quantity == 2 and separator is not None:
-            concat = list_of_series[0].astype(str).str.replace(r"\.0", "", regex=True) + separator + list_of_series[1].astype(str).str.replace(r"\.0$", "", regex=True)
+            concat = list_of_series[0].astype(str).str.replace(r"\.0$", "", regex=True) + separator + list_of_series[1].astype(str).str.replace(r"\.0$", "", regex=True)
         else:
             concat = list_of_series[0].astype(str)
             for i in range(1,quantity):
@@ -93,12 +93,12 @@ class DataFrameUtils:
     
     @staticmethod
     def save_dataframe(dataframe,full_path,sheet_name):
-      with pd.ExcelWriter(full_path,engine='openpyxl') as writer:
+      with pd.ExcelWriter(full_path,engine='xlsxwriter') as writer:
             dataframe.to_excel(writer,sheet_name =sheet_name, index= False)
 
     @staticmethod
     def save_multiple_dataframes(dataframes,full_path,sheet_names):
-        with pd.ExcelWriter(full_path,engine='openpyxl') as writer:
+        with pd.ExcelWriter(full_path,engine='xlsxwriter') as writer:
             for df,sheet in zip(dataframes,sheet_names):
                 df.to_excel(writer,sheet_name =sheet, index= False)
         
