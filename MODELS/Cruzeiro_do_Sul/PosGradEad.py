@@ -48,13 +48,12 @@ class PosGradEadCruzeiro:
         self.offers['Tipo de duração do curso'] = "mes"
         self.offers['Grau'] = "Especialização (pós-graduação)"
         self.offers['Qual valor usar?\n% ou R$'] = "porcentagem"
-        self.offers['LIMTADA?'] = "FALSE"
+        self.offers['LIMITADA?'] = "FALSE"
         self.offers.loc[:, 'Data de Início da Oferta'] = self.get_date_actually()
         self.offers['Porcentagem de desconto IES'] = self.transform_and_subtract_value(self.offers,'Porcentagem de desconto da bolsa (Fixo/1 º Semestre)')
         self.offers = dfu.find_and_replace(self.offers,'Nome da IES','CRUZEIRO DO SUL - PÓS EAD','ID da IES',3719)
         self.offers = dfu.find_and_replace(self.offers,'Nome da IES','POSITIVO - PÓS-GRADUAÇÃO EAD','ID da IES',1639)
         self.offers = dfu.find_and_replace(self.offers,'Nome da IES','UNIPÊ - PÓS-GRADUAÇÃO EAD','ID da IES',1593)
-        del self.offers['Porcentagem total de desconto da bolsa\n(2º Semestre)']
 
     def get_date_actually(self):
         today = date.today()
