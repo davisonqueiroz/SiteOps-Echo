@@ -93,12 +93,19 @@ class DataFrameUtils:
     
     @staticmethod
     def save_dataframe(dataframe,full_path,sheet_name):
-      with pd.ExcelWriter(full_path,engine='xlsxwriter') as writer:
+        app_version = "SOE - v1.2.0"
+        if app_version not in dataframe.columns:
+            dataframe.insert(0,"SOE - v1.2.0","")
+        with pd.ExcelWriter(full_path,engine='xlsxwriter') as writer:
             dataframe.to_excel(writer,sheet_name =sheet_name, index= False)
 
     @staticmethod
     def save_multiple_dataframes(dataframes,full_path,sheet_names):
+        app_version = "SOE - v1.2.0"
         with pd.ExcelWriter(full_path,engine='xlsxwriter') as writer:
             for df,sheet in zip(dataframes,sheet_names):
+                if app_version not in df.columns:
+                    df.insert(0,"SOE - v1.2.0","")
+                df.insert(0,"SOE - v1.2.0","")
                 df.to_excel(writer,sheet_name =sheet, index= False)
         
