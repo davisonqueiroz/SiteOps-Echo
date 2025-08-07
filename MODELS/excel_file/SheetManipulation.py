@@ -154,7 +154,7 @@ class SheetManipulation:
         dataframe.update({
             col: dataframe[col].apply(lambda_apply)
             for col in percentage_columns
-            if col in dataframe.columns
+            if col in dataframe.columns and not dataframe[col].isna().all()
         })
         return dataframe
     
@@ -256,7 +256,7 @@ class SheetManipulation:
         dataframe_msp  = dataframe_msp.astype({
             col: tipo
             for col, tipo in self.dtype.items()
-            if col in dataframe_msp.columns
+            if col in dataframe_msp.columns and not dataframe_msp[col].isna().all()
         })
         return self.adjust_percentages_in_msp(dataframe_msp)
 
