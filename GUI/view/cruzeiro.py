@@ -19,7 +19,7 @@ class CruzeiroDoSul(ContentArea):
 
         self.card_pos = Card("pos-grad","#FF7E29")
         self.card_pos.create_front_card("Cruzeiro Pós-Grad","#FF7E29","#F5F5F5","#000000","#D4D4D4","#8148C9","#F5F5F5","#7D3FC9","Selecione Relação Polos")
-        self.card_pos.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione a planilha MSP. \n2. Selecione o EXP de campus.\n3.Selecione a relação de Polos. \n4.Clique em 'Gerar'\n\n*IMPORTANTE: Certifique-se de selecionar na ordem correta, conforme instruções*")
+        self.card_pos.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione a planilha de Ofertas. \n2. Selecione o EXP de campus.\n3.Selecione a relação de Polos. \n4.Clique em 'Gerar'\n5.Selecione diretório que deseja salvar \n6.Preencha todos os campos solicitados e clique em 'OK'\n*IMPORTANTE: Certifique-se de selecionar na ordem correta*")
         btn2_pos = self.card_pos.create_btn("Selecione o EXP","#F5F5F5","#000000","5px","#D4D4D4",170,30)
         self.card_pos.add_component_card(btn2_pos)
         btn3_pos = self.card_pos.create_btn("Selecione Planilha ofertas","#F5F5F5","#000000","5px","#D4D4D4",170,30)
