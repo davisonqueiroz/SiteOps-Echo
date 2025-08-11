@@ -94,12 +94,12 @@ class Utilities(ContentArea):
     def process_kroton_lote(self):
         path = self.kroton_lote.paths["btn_option1"]
         if path:
-            kroton = KrotonLote(path)
             self.kroton_lote.set_save_manager("btn_generate")
             path_save = self.kroton_lote.paths["save"]
+            kroton = KrotonLote(path, path_save)
             if not path_save:
                     Notification.error("Diretório inválido","Erro ao tentar gerar planilha final. Diretório não selecionado ou inválido. Execute a operação novamente, selecionando um diretório válido.")
             else:
-                kroton.load(path_save)
+                kroton.load()
                 Notification.info("Operação finalizada","Planilha gerada com sucesso.")
             self.kroton_lote.set_text_btns(["btn_option1"])

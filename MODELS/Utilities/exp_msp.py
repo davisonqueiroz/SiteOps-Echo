@@ -168,7 +168,7 @@ class MSPConverter:
         msp_file = os.path.join(os.path.dirname(self.exp_file), f"MSP_{base_nome}.xlsx")
  
         try:
-            dfu.save_dataframe(self.df, msp_file)
+            dfu.save_dataframe(self.df, msp_file,"MSP")
             Notification.info("Arquivo Salvo",f"\n✅ Arquivo {msp_file} criado com sucesso com a estrutura MSP!")
         except Exception as e:
             Notification.error("Error ao Salvar",f"Erro ao salvar o arquivo Excel: {e}")

@@ -5,10 +5,16 @@ from MODELS.excel_file.DataFrameUtils import DataFrameUtils as dfu
 from GUI.widgets.notifications import Notification 
 
 class KrotonLote:
-    def __init__(self, path):
+    def __init__(self, exp_file, path_save):
         self.tec_courses = None
-        self.sheet = sma(path)               # Crie o objeto SheetManipulation
-        self.dataframe = self.sheet.load()   # Carregue o dataframe
+        self.save_path = path_save
+        self.exp_file = exp_file
+        self.sheet = sma(self.exp_file)
+        self.dataframe = self.sheet.load()
+        
+        # self.file = path
+        # self.sheet = sma(self.file)          # Crie o objeto SheetManipulation
+        # self.dataframe = self.sheet.load()   # Carregue o dataframe
 
 # Criar a coluna SKU na posição C (índice 2) - 
     def concat_sku_and_drop_duplicates(self):
@@ -35,13 +41,14 @@ class KrotonLote:
         self.tec_courses = dfu.filter_content_by_column(self.dataframe,'TÉCNICO', 'GRAU')
         self.dataframe = dfu.remove_values_from_column(self.dataframe, 'GRAU', self.tec_courses['GRAU'])
     
-    def load(self,file_path):
+    def load(self):
+        print(self.dataframe)
         self.concat_sku_and_drop_duplicates()
         self.drop_column_and_create_corrects()
         self.separate_courses()
         
         try:
-            dfu.save_multiple_dataframes([self.dataframe, self.tec_courses], file_path, ['graduação', 'técnico'])
+            dfu.save_multiple_dataframes([self.dataframe, self.tec_courses], self.save_path, ['graduação', 'técnico'])
         except Exception as e:
             Notification.error("Error ao Salvar",f"Erro ao salvar o arquivo Excel: {e}")
     
