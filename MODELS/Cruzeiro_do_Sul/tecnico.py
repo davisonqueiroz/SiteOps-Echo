@@ -22,6 +22,7 @@ class tecnicoCruzeiro:
         self._names_treatment()
         self._create_concat_in_tec_courses()
         self._concat_ids()
+        self.concat_and_join_nursing_courses()
         self._create_list_of_ids_by_course()
 
     def _separate_campus(self):
@@ -78,9 +79,9 @@ class tecnicoCruzeiro:
     def _nursing_treatment(self):
         self._separate_campus()
         self.check_nas_in_nursing_courses()
-        self.concat_and_join_nursing_courses()
 
     def check_nas_in_nursing_courses(self):
+        self.tec_nursing['ID_POLO'] = self.tec_nursing['ID_POLO'].astype(str)
         self.tec_nursing = dfu.xlookup(self.tec_nursing,self.campus_brazcubas,'ID_POLO','metadata_code','id','campus_id')
         if dfu.verify_if_have_nulls(self.tec_nursing['campus_id']):
             self.nursing_pending = dfu.get_rows_have_nulls(self.tec_nursing,'campus_id')
