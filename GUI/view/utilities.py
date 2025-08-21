@@ -33,12 +33,7 @@ class Utilities(ContentArea):
         self.card_csv = Card("csvtoxlsx","#FF7E29")
         self.card_csv.create_front_card("CSV para Excel","#FF7E29","#F5F5F5","#000000","#D4D4D4","#8148C9","#F5F5F5","#7D3FC9","Selecione a planilha")
         self.card_csv.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione a planilha CSV. \n2.Clique em 'Gerar'\n\nIMPORTANTE: O arquivo será salvo na pasta original com 'xlsx_' na frente do nome")
-        self.card_csv.set_action_btn("btn_generate", self.process_csv_converter)
-
-        self.card_fix_cities = Card("fix_cities","#FF7E29")
-        self.card_fix_cities.create_front_card("Corrigir Cidades","#FF7E29","#F5F5F5","#000000","#D4D4D4","#8148C9","#F5F5F5","#7D3FC9","Selecione a planilha")
-        self.card_fix_cities.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione a planilha MSP de Campus. \n2.Clique em 'Gerar'\n\nIMPORTANTE: O arquivo será salvo na pasta original com 'fixed_cities_' na frente do nome")
-        self.card_fix_cities.set_action_btn("btn_generate", self.process_fix_cities)    
+        self.card_csv.set_action_btn("btn_generate", self.process_csv_converter) 
 
         self.kroton_lote = Card("kroton_lote","#FF7E29")
         self.kroton_lote.create_front_card("kroton lote","#FF7E29","#F5F5F5","#000000","#D4D4D4","#8148C9","#F5F5F5","#7D3FC9","Selecione a planilha")
@@ -55,7 +50,6 @@ class Utilities(ContentArea):
         self.add_card(self.card_exp_msp,"TOP")
         self.add_card(self.card_duplicates,"TOP")
         self.add_card(self.card_csv,"TOP")
-        self.add_card(self.card_fix_cities,"BOTTOM")
         self.add_card(self.card_divisor,"BOTTOM")
         self.add_card(self.kroton_lote,"BOTTOM")
         self.add_card(self.campus,"BOTTOM")
@@ -81,14 +75,6 @@ class Utilities(ContentArea):
             csv_converter = CSVConverter(path)
             csv_converter.converter_para_excel()
             self.card_csv.set_text_btns(["btn_option1"])
-
-    def process_fix_cities(self):
-        path = self.card_fix_cities.paths["btn_option1"]
-        if path:
-            fix_cities = CorrigirCidades(path)
-            fix_cities.executar()
-            self.card_fix_cities.set_text_btns(["btn_option1"])
-
     
     def create_division(self):
         selected = self.card_divisor.get_selected_text()
