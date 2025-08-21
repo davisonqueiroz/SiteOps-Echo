@@ -6,6 +6,7 @@ from MODELS.Utilities.fix_cities import *
 from MODELS.Utilities.divisor import *
 from MODELS.Utilities.exp_msp import *
 from MODELS.Utilities.lote_kroton import *
+from MODELS.campus.changes_campus_verify import *
 
 class Utilities(ContentArea):
     def __init__(self):
@@ -44,12 +45,20 @@ class Utilities(ContentArea):
         self.kroton_lote.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione a planilha de lote. \n2.Clique em 'Gerar'\n\nIMPORTANTE: O arquivo será salvo na pasta original com 'fixed_cities_' na frente do nome")
         self.kroton_lote.set_action_btn("btn_generate", self.process_kroton_lote)     
 
+        self.campus = Card("campus","#FF7E29")
+        self.campus.create_front_card("Campus","#FF7E29","#F5F5F5","#000000","#D4D4D4","#8148C9","#F5F5F5","#7D3FC9","Selecione a planilha")
+        self.campus.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione a planilha de lote. \n2.Clique em 'Gerar'\n\nIMPORTANTE: O arquivo será salvo na pasta original com 'fixed_cities_' na frente do nome")
+        btn2_exp = self.campus.create_btn("Selecione exp campus","#F5F5F5","#000000","5px","#D4D4D4",170,30)
+        self.campus.add_component_card(btn2_exp)
+        self.campus.set_action_btn("btn_generate", self.process_campus)     
+        
         self.add_card(self.card_exp_msp,"TOP")
         self.add_card(self.card_duplicates,"TOP")
         self.add_card(self.card_csv,"TOP")
         self.add_card(self.card_fix_cities,"BOTTOM")
         self.add_card(self.card_divisor,"BOTTOM")
         self.add_card(self.kroton_lote,"BOTTOM")
+        self.add_card(self.campus,"BOTTOM")
 
 
     def process_exp_msp(self):
@@ -103,3 +112,20 @@ class Utilities(ContentArea):
                 kroton.load()
                 Notification.info("Operação finalizada","Planilha gerada com sucesso.")
             self.kroton_lote.set_text_btns(["btn_option1"])
+
+    def process_campus(self):
+        msp = self.campus.paths["btn_option1"]
+        exp = self.campus.paths["btn_option2"]
+        if msp and exp:
+            try:
+                self.campus.set_save_manager("btn_generate")
+                path_save = self.campus.paths["save"]
+                campus = CampusVerifications(exp,msp)
+                if not path_save:
+                        Notification.error("Diretório inválido","Erro ao tentar gerar planilha final. Diretório não selecionado ou inválido. Execute a operação novamente, selecionando um diretório válido.")
+                else:
+                    campus.load(path_save)
+                    Notification.info("Operação finalizada","Planilha gerada com sucesso.")
+                self.campus.set_text_btns(["btn_option1"])
+            except Exception as e:
+                Notification.error("Erro ao gerar Planilha", f"Erro ao tentar gerar planilha final.\nDetalhes: {e}")
