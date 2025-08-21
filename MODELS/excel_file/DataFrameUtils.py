@@ -10,6 +10,10 @@ class DataFrameUtils:
     def get_rows_have_nulls(dataframe,header_name):
         return dataframe[dataframe[header_name].isnull()]
 
+    @staticmethod 
+    def drop_rows_have_nulls(dataframe,header_name):
+        return dataframe[dataframe[header_name].notnull()].reset_index(drop=True)
+
     @staticmethod
     def append_series_in_dataframe(dataframe,new_column,content):
         dataframe[new_column] = content
@@ -106,6 +110,5 @@ class DataFrameUtils:
             for df,sheet in zip(dataframes,sheet_names):
                 if app_version not in df.columns:
                     df.insert(0,"SOE - v1.2.0","")
-                df.insert(0,"SOE - v1.2.0","")
                 df.to_excel(writer,sheet_name =sheet, index= False)
         
