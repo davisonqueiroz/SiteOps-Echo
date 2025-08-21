@@ -9,7 +9,7 @@ class SheetManipulation:
         "msp_offers" : ["Nome da IES", "ID da IES", "Nome do Campus","ID do Campus", "Nome do Curso" ],
         "exp_offers" : ["university_id", "campus_id", "name_from_university", "level", "kind"],
         "csv_kroton" : ["match_key", "campus_name", "max_payments", "full_price", "metadata_course_id"],
-        "msp_campus" : ["ID da IES", "IES", "Nome de Exibição", "Nome", "Logradouro", "Número"],
+        "msp_campus" : ["name", "name_from_university", "zipcode", "metadata_code", "address_number"],
         "exp_campus" : ["id", "name", "education_group_id", "metadata_code", "match_codes"],
         "lote_kroton" :["CHAVE", "LOTE", "IES", "COD_OFERTA_POLO", "DIA DA SEMANA"]
 
@@ -107,6 +107,12 @@ class SheetManipulation:
                 return pd.read_excel(self.path,sheet_name=self.sheet_name,dtype= self.dtype)
             except Exception as e:
                 raise ValueError (f"Erro ao carregar planilha Excel: {e}")
+        elif self.sheet_type == "msp_campus":
+            self.set_msp_campus_dtype()
+            try:
+                return pd.read_excel(self.path,sheet_name=self.sheet_name,dtype= self.dtype)
+            except Exception as e:
+                raise ValueError (f"Erro ao carregar planilha Excel: {e}")
         elif self.sheet_type == "others":
             try:
                 return pd.read_excel(self.path,sheet_name=self.sheet_name)
@@ -168,6 +174,12 @@ class SheetManipulation:
     def set_exp_campus_dtype(self):
         self.dtype = {
             'id' : str,
+            'metadata_code' : str,
+            'university_id' : str
+        }
+
+    def set_msp_campus_dtype(self):
+        self.dtype = {
             'metadata_code' : str,
             'university_id' : str
         }
