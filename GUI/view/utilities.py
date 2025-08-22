@@ -41,8 +41,8 @@ class Utilities(ContentArea):
         self.kroton_lote.set_action_btn("btn_generate", self.process_kroton_lote)     
 
         self.campus = Card("campus","#FF7E29")
-        self.campus.create_front_card("Campus","#FF7E29","#F5F5F5","#000000","#D4D4D4","#8148C9","#F5F5F5","#7D3FC9","Selecione a planilha")
-        self.campus.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione a planilha de lote. \n2.Clique em 'Gerar'\n\nIMPORTANTE: O arquivo será salvo na pasta original com 'fixed_cities_' na frente do nome")
+        self.campus.create_front_card("Campus","#FF7E29","#F5F5F5","#000000","#D4D4D4","#8148C9","#F5F5F5","#7D3FC9","Selecione MSP Polos")
+        self.campus.create_back_card("#FF7E29","Para a verificação e preenchimento correto siga as instruções: \n1. Selecione Exp de Campus e MSP Polos. \n2.Clique em 'Gerar'\n\n3. Selecione o diretório e nome do arquivo que será gerado")
         btn2_exp = self.campus.create_btn("Selecione exp campus","#F5F5F5","#000000","5px","#D4D4D4",170,30)
         self.campus.add_component_card(btn2_exp)
         self.campus.set_action_btn("btn_generate", self.process_campus)     
