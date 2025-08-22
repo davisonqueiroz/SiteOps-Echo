@@ -15,8 +15,8 @@ class CampusVerifications:
         if 'v1' in self.msp_campus.columns:
             self.msp_campus = self.msp_campus.drop(columns= 'v1') 
         self._separate_have_id()
-        self.metadata_treatment()
-        self.slug_treatment()
+        self._metadata_treatment()
+        self._slug_treatment()
 
     def _lower_all_columns_have_string(self):
         cols = ['name','name_from_university','address','address_adjunct','neighborhood','city']
@@ -30,12 +30,12 @@ class CampusVerifications:
                 self.campus_update = dfu.concat_dataframes(self.campus_update,id_nulls)
                 self.msp_campus = dfu.drop_rows_have_nulls(self.msp_campus,'id')
 
-    def metadata_treatment(self):
+    def _metadata_treatment(self):
         self.exp_verify['metadata_code'] = self.exp_verify['metadata_code'].astype(str).str.split("#")
         self.exp_verify = self.exp_verify.explode("metadata_code",ignore_index= True)
         self.exp_verify = dfu.replace_series(self.exp_verify,'metadata_code','nan','')
 
-    def slug_treatment(self):
+    def _slug_treatment(self):
         self.exp_verify['name'] = self.exp_verify['name'].str.replace(r'[^\w\s]|_', '', regex=True)
         if not self.msp_campus.empty and 'name' in self.msp_campus.columns:
             self.msp_campus['name'] = self.msp_campus['name'].str.replace(r'[^\w\s]|_', '', regex=True)
@@ -98,7 +98,7 @@ class CampusVerifications:
                 self.campus_update = dfu.concat_dataframes(self.campus_update,campus_sku)
                 self.msp_campus = dfu.remove_values_from_column(self.msp_campus,'id',self.campus_update['id'])
 
-    def separate_infos_in_columns(self):
+    def _separate_infos_in_columns(self):
         #dropar as colunas excedentes
         if 'concat1' in self.campus_update.columns:
             self.campus_update = self.campus_update.drop(columns= 'concat1')
@@ -116,7 +116,7 @@ class CampusVerifications:
                 if value_updt in exp_col.values:
                     self.campus_update.at[row,col] = 'ignore'
 
-    def remove_columns_all_ignore(self):
+    def _remove_columns_all_ignore(self):
         for column in self.campus_update.columns:
             if column == 'virtual' and self.campus_update[column].eq(False).all():
                 self.campus_update.drop(columns= column, inplace=True)
@@ -124,7 +124,7 @@ class CampusVerifications:
                 if self.campus_update[column].eq('ignore').all():
                     self.campus_update.drop(columns= column, inplace=True)
     
-    def remove_rows_all_ignore(self):
+    def _remove_rows_all_ignore(self):
         cols = self.campus_update.columns.difference(['id','university_id'])
         verify = self.campus_update[cols].eq('ignore').all(axis = 1)
         self.campus_update = self.campus_update.loc[~verify]
@@ -139,9 +139,9 @@ class CampusVerifications:
             self.campus_create = self.msp_campus
         if not self.campus_update.empty:
             self.campus_update['id'] = self.campus_update['id'].astype(int)
-            self.separate_infos_in_columns()
-            self.remove_columns_all_ignore()
-            self.remove_rows_all_ignore()
+            self._separate_infos_in_columns()
+            self._remove_columns_all_ignore()
+            self._remove_rows_all_ignore()
         if self.campus_create is not None:
             if 'id' in self.campus_create.columns:
                 self.campus_create = self.campus_create.drop(columns=['id','concat1'])
