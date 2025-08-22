@@ -58,6 +58,6 @@ class RemoverDuplicadas:
                 self.no_dup_file,
                 ["Sem Duplicadas", "Duplicadas"]
             )
-            Notification.success("Sucesso","Arquivo processado e salvo com sucesso!")
+            Notification.info("Sucesso","Arquivo processado e salvo com sucesso!")
         except Exception as e:
             Notification.error("Error ao Salvar",f"Erro ao salvar o arquivo Excel: {e}")

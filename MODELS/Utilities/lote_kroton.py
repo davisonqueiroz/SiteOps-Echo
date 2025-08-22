@@ -49,7 +49,6 @@ class KrotonLote:
         
         try:
             dfu.save_multiple_dataframes([self.dataframe, self.tec_courses], self.save_path, ['graduação', 'técnico'])
-            Notification.success("Sucesso","Arquivo processado e salvo com sucesso!")
         except Exception as e:
             Notification.error("Error ao Salvar",f"Erro ao salvar o arquivo Excel: {e}")
     
