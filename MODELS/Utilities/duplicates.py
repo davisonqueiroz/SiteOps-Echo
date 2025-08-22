@@ -43,7 +43,6 @@ class RemoverDuplicadas:
     def execute(self):
         print(self.type_table)
 
-        # Gera o caminho de saída com base no nome do arquivo original
         base_nome = os.path.splitext(os.path.basename(self.excel_file))[0]
         self.no_dup_file = os.path.join(os.path.dirname(self.excel_file), f"No_dup_{base_nome}.xlsx")
 
@@ -59,5 +58,6 @@ class RemoverDuplicadas:
                 self.no_dup_file,
                 ["Sem Duplicadas", "Duplicadas"]
             )
+            Notification.success("Sucesso","Arquivo processado e salvo com sucesso!")
         except Exception as e:
             Notification.error("Error ao Salvar",f"Erro ao salvar o arquivo Excel: {e}")
