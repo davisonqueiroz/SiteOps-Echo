@@ -42,7 +42,6 @@ class KrotonLote:
         self.dataframe = dfu.remove_values_from_column(self.dataframe, 'GRAU', self.tec_courses['GRAU'])
     
     def load(self):
-        print(self.dataframe)
         self.concat_sku_and_drop_duplicates()
         self.drop_column_and_create_corrects()
         self.separate_courses()

@@ -112,6 +112,6 @@ class Utilities(ContentArea):
                 else:
                     campus.load(path_save)
                     Notification.info("Operação finalizada","Planilha gerada com sucesso.")
-                self.campus.set_text_btns(["btn_option1"])
+                self.campus.set_text_btns(["btn_option1","btn_option2"])
             except Exception as e:
                 Notification.error("Erro ao gerar Planilha", f"Erro ao tentar gerar planilha final.\nDetalhes: {e}")
