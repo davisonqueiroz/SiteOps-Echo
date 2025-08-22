@@ -42,14 +42,13 @@ class KrotonLote:
         self.dataframe = dfu.remove_values_from_column(self.dataframe, 'GRAU', self.tec_courses['GRAU'])
     
     def load(self):
-        print(self.dataframe)
         self.concat_sku_and_drop_duplicates()
         self.drop_column_and_create_corrects()
         self.separate_courses()
         
         try:
             dfu.save_multiple_dataframes([self.dataframe, self.tec_courses], self.save_path, ['graduação', 'técnico'])
-            Notification.success("Sucesso","Arquivo processado e salvo com sucesso!")
+            Notification.info("Sucesso","Arquivo processado e salvo com sucesso!")
         except Exception as e:
             Notification.error("Error ao Salvar",f"Erro ao salvar o arquivo Excel: {e}")
     
