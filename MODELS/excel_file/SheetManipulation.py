@@ -11,7 +11,8 @@ class SheetManipulation:
         "csv_kroton" : ["match_key", "campus_name", "max_payments", "full_price", "metadata_course_id"],
         "msp_campus" : ["name", "name_from_university", "zipcode", "metadata_code", "address_number"],
         "exp_campus" : ["id", "name", "education_group_id", "metadata_code", "match_codes"],
-        "lote_kroton" :["CHAVE", "LOTE", "IES", "COD_OFERTA_POLO", "DIA DA SEMANA"]
+        "lote_kroton" : ["CHAVE", "LOTE", "IES", "COD_OFERTA_POLO", "DIA DA SEMANA"],
+        "estacio_campus": ["external_id","name","address","address_number","address_adjunct"]
 
 
     }
@@ -113,6 +114,12 @@ class SheetManipulation:
                 return pd.read_excel(self.path,sheet_name=self.sheet_name,dtype= self.dtype)
             except Exception as e:
                 raise ValueError (f"Erro ao carregar planilha Excel: {e}")
+        elif self.sheet_type == "estacio_campus":
+            self.set_estacio_campus_dtype()
+            try:
+                return pd.read_excel(self.path,sheet_name=self.sheet_name,dtype= self.dtype)
+            except Exception as e:
+                raise ValueError (f"Erro ao carregar planilha Excel: {e}")
         elif self.sheet_type == "others":
             try:
                 return pd.read_excel(self.path,sheet_name=self.sheet_name)
@@ -182,6 +189,12 @@ class SheetManipulation:
         self.dtype = {
             'metadata_code' : str,
             'university_id' : str
+        }
+    def set_estacio_campus_dtype(self):
+        self.dtype = {
+            'metadata_code' : str,
+            'university_id' : str,
+            'external_id' : str
         }
 
     def xlsx_is_ready(self):
