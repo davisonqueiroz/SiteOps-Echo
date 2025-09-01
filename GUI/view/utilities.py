@@ -6,7 +6,7 @@ from MODELS.Utilities.fix_cities import *
 from MODELS.Utilities.divisor import *
 from MODELS.Utilities.exp_msp import *
 from MODELS.Utilities.lote_kroton import *
-from MODELS.campus.changes_campus_verify import *
+from MODELS.campus.CampusVerifications import *
 
 class Utilities(ContentArea):
     def __init__(self):
